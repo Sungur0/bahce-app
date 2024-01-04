@@ -15,6 +15,7 @@ const DetailScreen = () => {
   };
 
 
+
   const { productId } = route.params;
   const { products } = useProductContext();
   const navigation = useNavigation();
@@ -47,6 +48,7 @@ const DetailScreen = () => {
   const handleGoBack = () => {
     navigation.goBack();
   };
+  
   return (
     <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
       <View style={styles.container}>

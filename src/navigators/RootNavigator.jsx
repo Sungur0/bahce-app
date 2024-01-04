@@ -1,13 +1,11 @@
 import React from 'react';
 import { createNativeStackNavigator, TransitionPresets } from '@react-navigation/native-stack';
 import DetailsScreen from '../screens/DetailsScreen';
-import HomeScreen from '../screens/HomeScreen';
 import Carts from '../screens/Carts';
 import '../screens/Products'
 import { View, Image } from 'react-native';
 import TopNavigator from './TopNavigator';
 import CategoryNavigator from './CategoryNavigator';
-
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
@@ -20,8 +18,8 @@ export default function RootNavigator() {
             animation: 'slide_from_bottom',
             gestureEnabled: true,
             transitionSpec: {
-                open: { animation: 'timing', config: { duration: 150 } },
-                close: { animation: 'timing', config: { duration: 50 } },
+                open: { animation: 'slide_from_bottom', config: { duration: 150 } },
+                close: { animation: 'slide_from_bottom', config: { duration: 50 } },
             },
 
         }} >
@@ -55,10 +53,12 @@ export default function RootNavigator() {
                 name="Ürünlerim"
                 component={CategoryNavigator}
                 options={{
-                    headerTitle: 'Ürünlerim',
-                    headerBackTitleVisible:false,
+                    headerTitle: 'Ürünler',
+                    headerBackTitleVisible: false,
+                    animation: 'slide_from_right',
                 }}
             />
+
         </Stack.Navigator>
     );
 }
