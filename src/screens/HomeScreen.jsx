@@ -8,7 +8,7 @@ const HomeScreen = () => {
 
     const navigation = useNavigation();
 
-
+    const { featuredProducts, getProductsByCategory } = useProductContext();
 
     // useLayoutEffect(() => {
     //     navigation.setOptions({
@@ -40,18 +40,27 @@ const HomeScreen = () => {
         { id: 10, name: 'Saksılar', src: require('../../assets/image2.jpg') },
         { id: 11, name: 'Topraklar', src: require('../../assets/image3.jpg') },
         { id: 12, name: 'Gübreler', src: require('../../assets/image1.jpg') },
-
     ]
+
+
     const handleCategoryPress = (categoryName) => {
         navigation.navigate('Ürünlerim', { screen: categoryName })
     };
 
+    const handleProductPress = (productId) => {
+        navigation.navigate('Ürün Detayı', { productId });
+      };
+    
 
-
+    const CustomButton = ({ title, onPress }) => (
+        <TouchableOpacity onPress={onPress} style={styles.button}>
+            <Text style={styles.buttonText}>{title}</Text>
+        </TouchableOpacity>
+    );
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
 
                 <View>
                     <Carousel
@@ -62,10 +71,10 @@ const HomeScreen = () => {
                         sliderWidth={wp(100)}
                         firstItem={1}
                         itemWidth={wp(100) - 45}
-                        slideStyle={{ display: 'flex', alignItems: 'center',borderRadius: 20}}
+                        slideStyle={{ display: 'flex', alignItems: 'center', borderRadius: 20,}}
                     />
                 </View>
-                
+
                 <View style={styles.itemList} >
                     {categories.map((category) => (
                         <TouchableOpacity
@@ -81,6 +90,52 @@ const HomeScreen = () => {
                         </TouchableOpacity>
                     ))}
                 </View>
+
+                <View style={{ width: '100%', borderTopWidth: 1, borderTopColor: '#dbdbdb',marginVertical:20 }}>
+                    <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20, marginHorizontal: 15 }}>
+                        <Text style={{ fontSize: 18 }}>Öne Çıkarılan Ürünler 🌟🚀</Text>
+                        <CustomButton title="Tümünü Gör" onPress={() => navigation.navigate('Öne Çıkarılan Ürünler')} />
+
+                    </View>
+
+                    <View>
+                        <FlatList
+                            data={featuredProducts}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity
+                                onPress={() => handleProductPress(item.id)}>
+
+                                <View style={{ width: 110, marginRight: 13, }}>
+                                    <Image source={item.src} style={{ width: 110, height: 110, objectFit: 'cover', borderWidth: 1, borderColor: '#dbdbdb', borderRadius: 20 }} />
+
+                                    <View style={styles.priceContainer}>
+                                        {item.discount && (
+                                            <View style={styles.discountContainer}>
+                                                <Text style={styles.discountText}>{item.discount}</Text>
+                                            </View>
+                                        )}
+                                        <Text style={[styles.itemPrice, !item.discount && styles.discountedPrice]}>
+                                            {item.price}
+                                        </Text>
+
+                                    </View>
+                                    <Text style={styles.itemName} >{item.name}</Text>
+
+                                </View>
+                                </TouchableOpacity>
+
+                            )}
+                            contentContainerStyle={{ paddingHorizontal: 15 }}
+                        />
+                    </View>
+                </View>
+
+
+
+
             </ScrollView>
 
         </SafeAreaView>
@@ -89,13 +144,15 @@ const HomeScreen = () => {
 
 const ItemCard = ({ item, index }, parallaxProps) => {
     return (
-        <View style={{ width: wp(100) - 35,height:hp(19), marginTop: 10, }}>
+        <View style={{ width: wp(100) - 35, height: hp(19), marginTop: 10, }}>
             <ParallaxImage
                 source={item.src}
-                containerStyle={{ borderRadius: 20, width: '100%', height: '100%',   borderWidth: 2,
-                borderColor: '#dbdbdb',  }}
+                containerStyle={{
+                    borderRadius: 20, width: '100%', height: '100%', borderWidth: 2,
+                    borderColor: '#dbdbdb', alignItems: 'center', justifyContent: 'center'
+                }}
                 style={{ resizeMode: 'contain' }}
-                parallaxFactor={0.3}
+                parallaxFactor={0}
                 {...parallaxProps}
             />
         </View>
@@ -104,14 +161,17 @@ const ItemCard = ({ item, index }, parallaxProps) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'#fff'
+        backgroundColor: '#fff'
+    },
+    buttonText:{
+        color:'#80B905',
+        fontSize:12,
     },
     itemList: {
         marginTop: 10,
         flexDirection: 'row',
         flexWrap: 'wrap',
         width: '100%',
-        // justifyContent: 'space-between', 
         paddingLeft: '3%',
         paddingRight: '3%',
     },

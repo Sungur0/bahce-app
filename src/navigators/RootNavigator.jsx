@@ -6,6 +6,7 @@ import '../screens/Products'
 import { View, Image } from 'react-native';
 import TopNavigator from './TopNavigator';
 import CategoryNavigator from './CategoryNavigator';
+import FeaturedProductsScreen from '../screens/FeaturedProducts';
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
@@ -56,6 +57,15 @@ export default function RootNavigator() {
                     headerTitle: 'Ürünler',
                     headerBackTitleVisible: false,
                     animation: 'slide_from_right',
+                }}
+            />
+               <Stack.Screen
+                name="Öne Çıkarılan Ürünler"
+                component={FeaturedProductsScreen}
+                options={{
+                    headerTitle: 'Öne Çıkarılan Ürünler',
+                    headerBackTitleVisible: false,
+                    // animation: 'slide_from_right',
                 }}
             />
 

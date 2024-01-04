@@ -1,66 +1,111 @@
-// HomeScreen içinde FeaturedProducts bileşeni
-import React, { useState ,useEffect} from 'react';
-import { ScrollView, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity,  SafeAreaView } from 'react-native';
+import { useProductContext } from '../context/ProductContext';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native-virtualized-view';
 
-const HomeScreen = () => {
-  const [showAll, setShowAll] = useState(false);
+const FeaturedProductsScreen = () => {
   const navigation = useNavigation();
 
-  const featuredProducts = [
-    { id: 1, name: 'Zammia Bitkisi', description: '...', price: '59.62₺', discount: '69.62₺', src: require('../../assets/image1.jpg') },
-    { id: 2, name: 'Pembe İkili Dekoratif Saksı', description: '...', price: '39.35₺', discount: '42.35₺', src: require('../../assets/image2.jpg') },
-  ];
-
-  const handleShowAll = () => {
-    setShowAll(true);
-    navigation.navigate('Öne Çıkarılanlar', { featuredProducts });
+  const { featuredProducts } = useProductContext();
+  const handleProductPress = (productId) => {
+    navigation.navigate('Ürün Detayı', { productId });
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView horizontal={!showAll} showsHorizontalScrollIndicator={false}>
-        {featuredProducts.map(product => (
-          <TouchableOpacity
-            key={product.id}
-            style={styles.productContainer}
-          >
-            <Image source={product.src} style={styles.productImage} />
-            <Text>{product.name}</Text>
-            <Text>{product.price}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={{marginVertical:15, width:'100',paddingRight: 15 }}>
+        <FlatList
+          data={featuredProducts}
+          numColumns={3}
+        style={styles.itemList}
 
-      {!showAll && (
-        <TouchableOpacity onPress={handleShowAll}>
-          <Text style={styles.showAllButton}>Tümünü Gör</Text>
-        </TouchableOpacity>
-      )}
-    </View>
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => handleProductPress(item.id)}>
+
+              <View style={{ width: 110, marginRight: 15, }}>
+                <Image source={item.src} style={{ width: 110, height: 110, objectFit: 'cover', borderWidth: 1, borderColor: '#dbdbdb', borderRadius: 20 }} />
+
+                <View style={styles.priceContainer}>
+                  {item.discount && (
+                    <View style={styles.discountContainer}>
+                      <Text style={styles.discountText}>{item.discount}</Text>
+                    </View>
+                  )}
+                  <Text style={[styles.itemPrice, !item.discount && styles.discountedPrice]}>
+                    {item.price}
+                  </Text>
+
+                </View>
+                <Text style={styles.itemName} >{item.name}</Text>
+
+              </View>
+            </TouchableOpacity>
+
+          )}
+          contentContainerStyle={{ paddingHorizontal: 15 }}
+        />
+      </View>
+    </ScrollView>
+
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    alignItems: 'center',
+  featuredItem: {
+    marginRight: 10,
   },
-  productContainer: {
-    margin: 10,
-    alignItems: 'center',
-  },
-  productImage: {
+  image: {
     width: 100,
     height: 100,
+    resizeMode: 'cover',
   },
-  showAllButton: {
+  itemList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    width: '100%',
+    marginHorizontal: 15
+  },
+  itemName: {
     textAlign: 'center',
-    color: 'blue',
-    marginTop: 10,
-    fontSize: 16,
-    fontWeight: 'bold',
+    width: '100%',
+    marginLeft: 0,
+    fontSize: 13,
+  },
+  itemImage: {
+    width: '100%',
+    height: 80,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#dbdbdb',
+    backgroundColor: '#dbdbdb',
+
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  itemPrice: {
+    fontSize: 14,
+    color: 'green',
+  },
+  discountContainer: {
+    padding: 5,
+  },
+  discountedPrice: {
+    marginLeft: 0,
+    width: '100%',
+    textAlign: 'center',
+  },
+  discountText: {
+    color: 'grey',
+    textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
   },
 });
 
-export default HomeScreen;
+export default FeaturedProductsScreen;

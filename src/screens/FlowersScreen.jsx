@@ -1,22 +1,22 @@
 import { View, Text } from 'react-native'
-import React,{useLayoutEffect} from 'react'
+import React, { useLayoutEffect } from 'react'
 import { useProductContext } from '../context/ProductContext';
 import { useNavigation } from '@react-navigation/native';
-import { FlatList, StyleSheet, TouchableOpacity, Image,Dimensions} from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
 const FlowersScreen = () => {
 
-    //   useLayoutEffect(() => {
-    //     navigation.setOptions({
-    //         headerRight: () => {
-    //             return (
-    //                 <Button
-    //                     title='Sepet'
-    //                     onPress={() => navigation.navigate('Sepetim')} />
-    //             )
-    //         }
-    //     })
-    // }, [navigation])
+  //   useLayoutEffect(() => {
+  //     navigation.setOptions({
+  //         headerRight: () => {
+  //             return (
+  //                 <Button
+  //                     title='Sepet'
+  //                     onPress={() => navigation.navigate('Sepetim')} />
+  //             )
+  //         }
+  //     })
+  // }, [navigation])
   const { getProductsByCategory } = useProductContext();
   const flowerProducts = getProductsByCategory('flowers');
   const navigation = useNavigation();
@@ -32,9 +32,9 @@ const FlowersScreen = () => {
 
   const renderItems = ({ item }) => (
     <TouchableOpacity
-    onPress={() => handleProductPress(item.id)}
-    style={[styles.itemContainer, { width: itemWidth, marginBottom: 10 }]}
-  >
+      onPress={() => handleProductPress(item.id)}
+      style={[styles.itemContainer, { width: itemWidth, marginBottom: 10 }]}
+    >
       <Image source={item.src}
         style={styles.itemImage} />
 
@@ -56,7 +56,7 @@ const FlowersScreen = () => {
   return (
 
 
- 
+
     <ScrollView style={styles.container}>
 
       <FlatList
@@ -65,6 +65,8 @@ const FlowersScreen = () => {
         keyExtractor={keyExtractor}
         style={styles.itemList}
         numColumns={3}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
+
       />
 
     </ScrollView>
@@ -79,13 +81,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flexWrap: 'wrap',
     width: '100%',
-    paddingLeft:'3%',
-    paddingRight:'3%'
+    marginHorizontal: 15
 
   },
   itemContainer: {
     flexDirection: 'column',
-    padding: 7,
+    padding: 6,
     flexWrap: 'wrap',
     paddingTop: '5%'
 
