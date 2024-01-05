@@ -144,11 +144,11 @@ const HomeScreen = () => {
 
 const ItemCard = ({ item, index }, parallaxProps) => {
     return (
-        <View style={{ width: wp(100) - 35, height: hp(19), marginTop: 10, }}>
+        <View style={{ width: wp(100) - 35, height: hp(14), marginTop: 10, }}>
             <ParallaxImage
                 source={item.src}
                 containerStyle={{
-                    borderRadius: 20, width: '100%', height: '100%', borderWidth: 2,
+                    borderRadius: 20, width: '100%', height: '100%', borderWidth: 1,
                     borderColor: '#dbdbdb', alignItems: 'center', justifyContent: 'center'
                 }}
                 style={{ resizeMode: 'contain' }}
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     },
     buttonText:{
         color:'#80B905',
-        fontSize:12,
+        fontSize:11,
     },
     itemList: {
         marginTop: 10,
