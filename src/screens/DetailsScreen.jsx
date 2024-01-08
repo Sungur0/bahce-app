@@ -89,9 +89,12 @@ const DetailScreen = () => {
               ))}
             </Swiper>
           ) : (
+            
+            <TouchableOpacity onPress={() => openLightbox(product.src)}>
             <View style={{ height: 300, backgroundColor: '#fff' }}>
               <Image source={product.src} style={{ height: 300, objectFit: 'contain', alignSelf: 'center' }} />
             </View>
+          </TouchableOpacity>
           )}
 
 
@@ -103,7 +106,7 @@ const DetailScreen = () => {
           animationIn ='fadeIn'
           animationInTiming={1000}
           animationOut='fadeOut'
-          animationOutTiming= {300}
+          animationOutTiming= {400}
           style={styles.modal}
           backdropOpacity={1}
         >

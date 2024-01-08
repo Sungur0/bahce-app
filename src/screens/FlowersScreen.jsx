@@ -4,8 +4,15 @@ import { useProductContext } from '../context/ProductContext';
 import { useNavigation } from '@react-navigation/native';
 import { FlatList, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
-const FlowersScreen = () => {
+import { useSepet } from '../context/SepetProvider';
+import Feather from 'react-native-vector-icons/Feather';
 
+
+const FlowersScreen = () => {
+  const { urunuSepeteEkle } = useSepet();
+
+
+  
   //   useLayoutEffect(() => {
   //     navigation.setOptions({
   //         headerRight: () => {
@@ -35,6 +42,14 @@ const FlowersScreen = () => {
       onPress={() => handleProductPress(item.id)}
       style={[styles.itemContainer, { width: itemWidth, marginBottom: 10 }]}
     >
+      <TouchableOpacity
+        onPress={() => urunuSepeteEkle(item)}
+
+        style={styles.addBtn}
+      >
+        <Text style={{fontWeight:600}}><Feather name='plus' size={15} color='#80B905' />
+        </Text>
+      </TouchableOpacity>
       <Image source={item.src}
         style={styles.itemImage} />
 
@@ -75,6 +90,27 @@ const FlowersScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  addBtn: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    backgroundColor: '#fff',
+    top: 10,
+    right: 2,
+    zIndex: 1,
+    padding: 5,
+    borderRadius: 5,
+    width: 30,
+    height: 30,
+    borderWidth: 2,
+    borderColor: 'white',
+    shadowColor: '#80B905',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.7,
+    shadowRadius: 3,
+    elevation: 3, 
   },
   itemList: {
     marginTop: 10,
