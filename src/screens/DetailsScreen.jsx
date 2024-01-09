@@ -1,5 +1,7 @@
-import { View, Text, StyleSheet, Image, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useLayoutEffect, useState } from 'react'
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+import React, { useLayoutEffect, useState } from 'react';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useProductContext } from '../context/ProductContext';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -7,11 +9,14 @@ import { Button } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import Modal from 'react-native-modal';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useSepet } from '../context/SepetProvider';
 
+
+const Tab = createMaterialTopTabNavigator();
 
 const DetailScreen = () => {
+  const { urunuSepeteEkle } = useSepet();
   const { products } = useProductContext();
-
   const route = useRoute();
   const [lightboxVisible, setLightboxVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -19,22 +24,18 @@ const DetailScreen = () => {
   const { productId } = route.params;
   const navigation = useNavigation();
 
-
   const openLightbox = (image) => {
     setSelectedImage(image);
     setLightboxVisible(true);
   };
 
   const closeLightbox = () => {
-    // setSelectedImage(null);
     setLightboxVisible(false);
   };
+
   const handleImageLoad = () => {
     setLoading(false);
   };
-
-
-
 
   const product = products.find((item) => item.id === productId);
 
@@ -46,13 +47,11 @@ const DetailScreen = () => {
           color='black'
           type='clear'
           icon={<Icon name="close" size={24} color="white" />}
-          style={{ marginLeft: 10, }}
+          style={{ marginLeft: 10 }}
         />
       ),
     });
   }, [navigation]);
-
-
 
   if (!product) {
     return (
@@ -61,83 +60,122 @@ const DetailScreen = () => {
       </View>
     );
   }
+
   const handleGoBack = () => {
     navigation.goBack();
   };
+  const ProductDetailScreen = ({ route }) => {
+    const { product } = route.params;
 
-  return (
-    <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
-      <View style={styles.container}>
+    return (
+      <View style={{flex:1}}>
+        <Text>Ürün Detayları</Text>
+        <Text>{product.name}</Text>
+        <Text>{product.description}</Text>
+        <Text>{product.price}</Text>
+      </View>
+    );
+  };
 
+  const RecommendedProductsScreen = ({ route }) => {
+    const { recommendedProducts } = route.params;
 
-
-        <View >
-          {product.models && product.models.length > 0 ? (
-            <Swiper
-              style={{ height: 300, backgroundColor: '#fff' }}
-              dotStyle={styles.dot}
-              activeDotStyle={styles.activeDot}
-              loop={false}
-              paginationStyle={{ bottom: 5 }}
-            >
-              {product.models.map((model, index) => (
-                <TouchableOpacity key={index} onPress={() => openLightbox(model)}>
-                  <View style={{ height: 300 }}>
-                    <Image source={model} style={{ height: 300, objectFit: 'contain', alignSelf: 'center' }} />
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </Swiper>
-          ) : (
-            
-            <TouchableOpacity onPress={() => openLightbox(product.src)}>
-            <View style={{ height: 300, backgroundColor: '#fff' }}>
-              <Image source={product.src} style={{ height: 300, objectFit: 'contain', alignSelf: 'center' }} />
-            </View>
-          </TouchableOpacity>
-          )}
-
-
-        </View>
-        <Modal
-          isVisible={lightboxVisible}
-          // onBackdropPress={closeLightbox}
-          onBackButtonPress={closeLightbox}
-          animationIn ='fadeIn'
-          animationInTiming={1000}
-          animationOut='fadeOut'
-          animationOutTiming= {400}
-          style={styles.modal}
-          backdropOpacity={1}
-        >
-          <View>
-            <TouchableOpacity onPress={closeLightbox} style={styles.closeButton}>
-              <Icon name="close" size={27} color="white" />
-            </TouchableOpacity>
-            <Image source={selectedImage} style={{ height: 300, resizeMode: 'contain',backgroundColor:'#fff', alignSelf: 'center', }} />
-
-          </View>
-        </Modal>
-
-
-
-
-        <View style={styles.productDetail}>
-          <Text style={styles.price}>{product.price}</Text>
-
-          <Text style={styles.name}>{product.name}</Text>
-          <Text style={styles.description}>{product.description}</Text>
-        </View>
+    return (
+      <View>
+          <Text>{product.name}</Text>
 
       </View>
-    </ScrollView>
+    );
+  };
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true} >
+        <View style={styles.container}>
+          <View>
+            {product.models && product.models.length > 0 ? (
+              <Swiper
+                style={{ height: 300, backgroundColor: '#fff' }}
+                dotStyle={styles.dot}
+                activeDotStyle={styles.activeDot}
+                loop={false}
+                paginationStyle={{ bottom: 5 }}
+              >
+                {product.models.map((model, index) => (
+                  <TouchableOpacity key={index} onPress={() => openLightbox(model)}>
+                    <View style={{ height: 300 }}>
+                      <Image source={model} style={{ height: 300, objectFit: 'contain', alignSelf: 'center' }} />
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </Swiper>
+            ) : (
+              <View style={{ height: 300, backgroundColor: '#fff' }}>
+                <Image source={product.src} style={{ height: 300, objectFit: 'contain', alignSelf: 'center' }} />
+              </View>
+            )}
+          </View>
+
+          <Modal
+            isVisible={lightboxVisible}
+            onBackButtonPress={closeLightbox}
+            animationIn="fadeIn"
+            animationInTiming={1000}
+            animationOut="fadeOut"
+            animationOutTiming={300}
+            style={styles.modal}
+            backdropOpacity={1}
+          >
+            <View>
+              <TouchableOpacity onPress={closeLightbox} style={styles.closeButton}>
+                <Icon name="close" size={27} color="white" />
+              </TouchableOpacity>
+              <Image source={selectedImage} style={{ height: 300, resizeMode: 'contain', backgroundColor: '#fff', alignSelf: 'center' }} />
+            </View>
+          </Modal>
+
+          <View style={styles.productDetail}>
+            <Text style={styles.price}>{product.price}</Text>
+            <Text style={styles.name}>{product.name}</Text>
+            <Text style={styles.description}>{product.description}</Text>
+          </View>
+        
+          <Tab.Navigator  style={{flex:1,height:wp(100)}} >
+            <Tab.Screen name="Detaylar" component={ProductDetailScreen} initialParams={{ product }} />
+
+            <Tab.Screen name="Önerilenler" component={RecommendedProductsScreen} initialParams={{ recommendedProducts: product.recommendedProducts }} />
+          </Tab.Navigator>
+     
+        </View>
+     
+      </ScrollView>
+
+      <View style={styles.bottomContainer}>
+        <TouchableOpacity style={styles.sepeteEkleButton} onPress={() => urunuSepeteEkle(product)}>
+          <Text style={styles.sepeteEkleText}>Sepete Ekle</Text>
+        </TouchableOpacity>
+      </View>
+
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative'
+    position: 'relative',
+    backgroundColor: '#fff',
+    borderBottomRightRadius: 15,
+    borderBottomLeftRadius: 15,
+  },
+  bottomContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    paddingVertical: 15,
+    paddingBottom: 40,
+    right: 0,
+    backgroundColor: '#fff',
   },
   imageContainer: {
     width: '100%',
@@ -188,6 +226,19 @@ const styles = StyleSheet.create({
     top: hp('-25%'),
     left: hp('0%'),
     padding: 10,
+  },
+  sepeteEkleButton: {
+    width: '95s%',
+    backgroundColor: '#80B905',
+    paddingVertical: 15,
+    alignItems: 'center',
+    borderRadius: 10,
+    marginHorizontal: 10,
+  },
+  sepeteEkleText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 

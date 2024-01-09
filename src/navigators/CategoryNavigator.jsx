@@ -23,8 +23,6 @@ const CategoryNavigator = () => (
     <Tab.Screen name="Saksılar" component={PotsScreen} />
     <Tab.Screen name="Topraklar" component={SoilScreen} />
     <Tab.Screen name="Gübreler" component={FertilizersScreen} />
-    <Tab.Screen name="Null" component={Products} />
-
   </Tab.Navigator>
 );
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity,  SafeAreaView } from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useProductContext } from '../context/ProductContext';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
@@ -15,11 +15,11 @@ const FeaturedProductsScreen = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={{marginVertical:15, width:'100',paddingRight: 15 }}>
+      <View style={{ marginVertical: 15, width: '100', paddingRight: 15 }}>
         <FlatList
           data={featuredProducts}
           numColumns={3}
-        style={styles.itemList}
+          style={styles.itemList}
 
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (

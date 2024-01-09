@@ -1,8 +1,8 @@
 import { View, Text } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useCallback} from 'react'
 import { useProductContext } from '../context/ProductContext';
 import { useNavigation } from '@react-navigation/native';
-import { FlatList, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, Image, Dimensions,Button } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
 import { useSepet } from '../context/SepetProvider';
 import Feather from 'react-native-vector-icons/Feather';
@@ -10,9 +10,9 @@ import Feather from 'react-native-vector-icons/Feather';
 
 const FlowersScreen = () => {
   const { urunuSepeteEkle } = useSepet();
+  const { sepet } = useSepet();
 
-
-  
+  console.log('Sepet İçeriği:', sepet);
   //   useLayoutEffect(() => {
   //     navigation.setOptions({
   //         headerRight: () => {
@@ -34,24 +34,25 @@ const FlowersScreen = () => {
   const itemWidth = (Dimensions.get('window').width - 30) / numColumns;
 
   const handleProductPress = (productId) => {
-    navigation.navigate('Ürün Detayı', { productId });
+    if (productId) {
+      navigation.navigate('Ürün Detayı', { productId });
+    }
   };
 
-  const renderItems = ({ item }) => (
+  const renderItems = ({ item }) => {
+    console.log('Render: ', item.id);
+    return(
     <TouchableOpacity
       onPress={() => handleProductPress(item.id)}
       style={[styles.itemContainer, { width: itemWidth, marginBottom: 10 }]}
     >
-      <TouchableOpacity
-        onPress={() => urunuSepeteEkle(item)}
-
-        style={styles.addBtn}
-      >
-        <Text style={{fontWeight:600}}><Feather name='plus' size={15} color='#80B905' />
+      <TouchableOpacity onPress={() => urunuSepeteEkle(item)} style={styles.addBtn}>
+        <Text style={{ fontWeight: 600 }}>
+          <Feather name='plus' size={15} color='#80B905' />
         </Text>
       </TouchableOpacity>
-      <Image source={item.src}
-        style={styles.itemImage} />
+      
+      <Image source={item.src} style={styles.itemImage} />
 
       <View style={styles.priceContainer}>
         {item.discount && (
@@ -62,12 +63,11 @@ const FlowersScreen = () => {
         <Text style={[styles.itemPrice, !item.discount && styles.discountedPrice]}>
           {item.price}
         </Text>
-
       </View>
-      <Text style={styles.itemName} >{item.name}</Text>
-
+      <Text style={styles.itemName}>{item.name}</Text>
     </TouchableOpacity>
-  );
+    )
+  };
   return (
 
 
@@ -81,7 +81,7 @@ const FlowersScreen = () => {
         style={styles.itemList}
         numColumns={3}
         contentContainerStyle={{ paddingHorizontal: 15 }}
-
+        extraData={sepet}
       />
 
     </ScrollView>
@@ -97,19 +97,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     backgroundColor: '#fff',
-    top: 10,
+    top: 12,
     right: 2,
-    zIndex: 1,
+    zIndex: 2,
     padding: 5,
     borderRadius: 5,
     width: 30,
     height: 30,
-    borderWidth: 2,
-    borderColor: 'white',
+    borderWidth: 0.1,
+    borderColor: '#80B905',
     shadowColor: '#80B905',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.7,
-    shadowRadius: 3,
+    shadowRadius: 1,
     elevation: 3, 
   },
   itemList: {
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     flexDirection: 'column',
-    padding: 6,
+    padding: 7,
     flexWrap: 'wrap',
     paddingTop: '5%'
 

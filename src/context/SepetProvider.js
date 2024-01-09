@@ -11,6 +11,7 @@ export const SepetProvider = ({ children }) => {
   const urunuSepeteEkle = useCallback((urun) => {
     setSepet((prevSepet) => [...prevSepet, urun]);
   }, [setSepet]);
+  
 
   // Sepet bilgisine erişim sağlamak için bir değer sağlayın
   const contextValue = {

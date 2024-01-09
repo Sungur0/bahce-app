@@ -8,7 +8,6 @@ export default function App() {
   return (
     <View style={styles.container}>
       <SepetProvider>
-
         <ProductProvider>
           <NavigationContainer>
             <RootNavigator />
