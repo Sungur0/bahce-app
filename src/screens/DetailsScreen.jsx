@@ -9,13 +9,11 @@ import { Button } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import Modal from 'react-native-modal';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { useSepet } from '../context/SepetProvider';
 
 
 const Tab = createMaterialTopTabNavigator();
 
 const DetailScreen = () => {
-  const { urunuSepeteEkle } = useSepet();
   const { products } = useProductContext();
   const route = useRoute();
   const [lightboxVisible, setLightboxVisible] = useState(false);
@@ -68,7 +66,7 @@ const DetailScreen = () => {
     const { product } = route.params;
 
     return (
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
         <Text>Ürün Detayları</Text>
         <Text>{product.name}</Text>
         <Text>{product.description}</Text>
@@ -82,7 +80,7 @@ const DetailScreen = () => {
 
     return (
       <View>
-          <Text>{product.name}</Text>
+        <Text>{product.name}</Text>
 
       </View>
     );
@@ -90,7 +88,9 @@ const DetailScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true} >
+      <ScrollView showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={true}
+        contentContainerStyle={{ flexGrow: 1 }} >
         <View style={styles.container}>
           <View>
             {product.models && product.models.length > 0 ? (
@@ -139,19 +139,27 @@ const DetailScreen = () => {
             <Text style={styles.name}>{product.name}</Text>
             <Text style={styles.description}>{product.description}</Text>
           </View>
-        
-          <Tab.Navigator  style={{flex:1,height:wp(100)}} >
+
+          <Tab.Navigator style={{ flex: 1, height: wp(100) }}
+            scrollEnabled={true}
+            screenOptions={{
+              tabBarScrollEnabled: true,
+              tabBarLabelStyle: { fontSize: 13, textTransform: 'capitalize' },
+              tabBarItemStyle: { width: 98 },
+              tabBarIndicatorStyle: { backgroundColor: '#FD8407' },
+            }}
+          >
             <Tab.Screen name="Detaylar" component={ProductDetailScreen} initialParams={{ product }} />
 
             <Tab.Screen name="Önerilenler" component={RecommendedProductsScreen} initialParams={{ recommendedProducts: product.recommendedProducts }} />
           </Tab.Navigator>
-     
+
         </View>
-     
+
       </ScrollView>
 
       <View style={styles.bottomContainer}>
-        <TouchableOpacity style={styles.sepeteEkleButton} onPress={() => urunuSepeteEkle(product)}>
+        <TouchableOpacity style={styles.sepeteEkleButton}>
           <Text style={styles.sepeteEkleText}>Sepete Ekle</Text>
         </TouchableOpacity>
       </View>

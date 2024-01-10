@@ -1,18 +1,23 @@
 import React from 'react';
 import { createNativeStackNavigator, TransitionPresets } from '@react-navigation/native-stack';
 import DetailsScreen from '../screens/DetailsScreen';
+import LoginScreen from '../screens/LoginScreen';
 import Carts from '../screens/Carts';
 import '../screens/Products'
 import { View, Image } from 'react-native';
 import TopNavigator from './TopNavigator';
 import CategoryNavigator from './CategoryNavigator';
 import FeaturedProductsScreen from '../screens/FeaturedProducts';
+import SignUpScreen from '../screens/SignupScreen';
+import { useSelector } from 'react-redux';
+
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     return (
 
-        <Stack.Navigator initialRouteName="Home" screenOptions={{
+        <Stack.Navigator initialRouteName={isLoggedIn ? 'Tab' : 'Login'}screenOptions={{
             tabBarShowLabel: false,
             tabBarActiveTintColor: 'black',
             tabBarInactiveTintColor: 'grey',
@@ -45,11 +50,11 @@ export default function RootNavigator() {
                 // animation:'slide_from_bottom'
 
             }} />
-            <Stack.Screen
-                name="Sepetim"
-                component={Carts}
+            <Stack.Screen name="Sepetim"  component={Carts}/>
+            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Signup" component={SignUpScreen} />
 
-            />
+
             <Stack.Screen
                 name="Ürünlerim"
                 component={CategoryNavigator}
@@ -59,7 +64,7 @@ export default function RootNavigator() {
                     animation: 'slide_from_right',
                 }}
             />
-               <Stack.Screen
+            <Stack.Screen
                 name="Öne Çıkarılan Ürünler"
                 component={FeaturedProductsScreen}
                 options={{

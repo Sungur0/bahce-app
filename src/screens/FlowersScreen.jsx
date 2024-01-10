@@ -4,16 +4,8 @@ import { useProductContext } from '../context/ProductContext';
 import { useNavigation } from '@react-navigation/native';
 import { FlatList, StyleSheet, TouchableOpacity, Image, Dimensions,Button } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
-import { useSepet } from '../context/SepetProvider';
 import Feather from 'react-native-vector-icons/Feather';
-
-
-const FlowersScreen = () => {
-  const { urunuSepeteEkle } = useSepet();
-  const { sepet } = useSepet();
-
-  console.log('Sepet İçeriği:', sepet);
-  //   useLayoutEffect(() => {
+ //   useLayoutEffect(() => {
   //     navigation.setOptions({
   //         headerRight: () => {
   //             return (
@@ -24,6 +16,11 @@ const FlowersScreen = () => {
   //         }
   //     })
   // }, [navigation])
+
+const FlowersScreen = () => {
+
+
+ 
   const { getProductsByCategory } = useProductContext();
   const flowerProducts = getProductsByCategory('flowers');
   const navigation = useNavigation();
@@ -40,18 +37,12 @@ const FlowersScreen = () => {
   };
 
   const renderItems = ({ item }) => {
-    console.log('Render: ', item.id);
     return(
     <TouchableOpacity
       onPress={() => handleProductPress(item.id)}
       style={[styles.itemContainer, { width: itemWidth, marginBottom: 10 }]}
     >
-      <TouchableOpacity onPress={() => urunuSepeteEkle(item)} style={styles.addBtn}>
-        <Text style={{ fontWeight: 600 }}>
-          <Feather name='plus' size={15} color='#80B905' />
-        </Text>
-      </TouchableOpacity>
-      
+
       <Image source={item.src} style={styles.itemImage} />
 
       <View style={styles.priceContainer}>
@@ -81,7 +72,6 @@ const FlowersScreen = () => {
         style={styles.itemList}
         numColumns={3}
         contentContainerStyle={{ paddingHorizontal: 15 }}
-        extraData={sepet}
       />
 
     </ScrollView>

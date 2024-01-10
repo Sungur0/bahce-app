@@ -3,24 +3,23 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import RootNavigator from './src/navigators/RootNavigator';
 import { ProductProvider } from './src/context/ProductContext';
-import { SepetProvider } from './src/context/SepetProvider';
+import { Provider } from 'react-redux';
+import store from './src/store';
 export default function App() {
   return (
-    <View style={styles.container}>
-      <SepetProvider>
+    <Provider store={store}>
+      <View style={styles.container}>
         <ProductProvider>
           <NavigationContainer>
             <RootNavigator />
-            <StatusBar style='auto' />
+            <StatusBar style="auto" />
           </NavigationContainer>
         </ProductProvider>
-      </SepetProvider>
-
-    </View>
+      </View>
+    </Provider>
 
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
