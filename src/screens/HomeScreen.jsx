@@ -62,7 +62,7 @@ const HomeScreen = () => {
     );
 
     return (
-        <SafeAreaView style={styles.container}>
+        // <SafeAreaView style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
 
                 <View>
@@ -143,7 +143,7 @@ const HomeScreen = () => {
 
             </ScrollView>
 
-        </SafeAreaView>
+        // </SafeAreaView>
     )
 }
 
