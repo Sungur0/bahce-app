@@ -4,8 +4,6 @@ import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
-  TextInput,
-  Button,
   ImageBackground,
   StyleSheet,
   Alert,
@@ -13,17 +11,22 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-  SafeAreaView,
-  ScrollView, TouchableOpacity
+  TouchableOpacity
 } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
+import AppTextInput from "../components/appTextInput";
+import Font from "../constants/Font";
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../redux/userSlice';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 
-
 const backgroundImage = require('../../assets/background.png');
 
+
+
+
 const LoginScreen = ({ navigation }) => {
+  const [isFocused, setIsFocused] = useState(false);
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const storedUserData = useSelector((state) => state.user.user);
@@ -66,9 +69,9 @@ const LoginScreen = ({ navigation }) => {
   return (
 
     <ImageBackground source={backgroundImage} style={styles.background}>
-      {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
+      {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
-      {/* <KeyboardAvoidingView
+        <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.container}
         > */}
@@ -87,38 +90,127 @@ const LoginScreen = ({ navigation }) => {
 
       </Animated.View>
 
+
+      <View style={{ top: 0, alignItems: 'center', }}>
+        <Animated.Text
+          entering={FadeInUp.duration(1000).springify()}
+          style={{
+            fontSize: 24, color: '#fff',
+            fontFamily: Font["poppins-bold"],
+          }}
+        >
+          Giriş Yap
+        </Animated.Text>
+      </View>
+
+
       <View style={styles.container}>
 
-        <View>
-          <Animated.Text
-            entering={FadeInUp.duration(1000).springify()}
-         >
-            Login
-          </Animated.Text>
+        <View style={styles.inputBlock}>
+          <AppTextInput placeholder="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)} />
+          <AppTextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry />
         </View>
 
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          secureTextEntry
-          style={styles.input}
-        />
+        <Text style={{
+          alignSelf: 'flex-end',
+          fontFamily: Font["poppins-regular"],
+          color: '#80B905',
+        }}>
+          Şifreni mi unuttun?</Text>
+
         <TouchableOpacity onPress={handleLogin} style={styles.button}>
           <Text style={styles.loginBtn}>Giriş Yap</Text>
         </TouchableOpacity>
-        <Text style={{ color: '#fff' }}>
-          Üye Değil Misiniz? <Text style={{ color: 'blue' }} onPress={handleSignUpNavigation}>Hemen Üye Olun</Text>
-        </Text>
+
+        <TouchableOpacity
+          onPress={handleSignUpNavigation}
+          style={{
+            padding: 15,
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: Font["poppins-semiBold"],
+              color: '#2C373D',
+              textAlign: "center",
+              fontSize: 15,
+            }}
+          >
+            Yeni hesap oluştur
+          </Text>
+        </TouchableOpacity>
+
+
+        <Text
+            style={{
+              fontFamily: Font["poppins-semiBold"],
+              color: '#80B905',
+              textAlign: "center",
+              fontSize: 13,
+            }}
+          >
+            Ya da şununla devam et :
+          </Text>
+
+        <View
+            style={{
+              marginTop: 10,
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+        <TouchableOpacity
+          style={{
+            padding: 10,
+            backgroundColor: '#DBDBDB',
+            borderRadius: 5,
+            marginHorizontal: 10,
+          }}
+        >
+          <Ionicons
+            name="logo-google"
+            color='#060606'
+            size={20}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            padding: 10,
+            backgroundColor: '#DBDBDB',
+            borderRadius: 5,
+            marginHorizontal: 10,
+          }}
+        >
+          <Ionicons
+            name="logo-apple"
+            color='#060606'
+            size={20}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            padding: 10,
+            backgroundColor: '#DBDBDB',
+            borderRadius: 5,
+            marginHorizontal: 10,
+          }}
+        >
+          <Ionicons
+            name="logo-facebook"
+            color='#060606'
+            size={20}
+          />
+        </TouchableOpacity>
+        </View>
       </View>
-      {/* </KeyboardAvoidingView> */}
-      {/* </TouchableWithoutFeedback> */}
+      {/* </KeyboardAvoidingView>
+      </TouchableWithoutFeedback> */}
     </ImageBackground>
 
   );
@@ -128,10 +220,8 @@ const styles = StyleSheet.create({
 
 
   container: {
-    
+    marginHorizontal: 10,
     flex: 1,
-    justifyContent:'center',
-    paddingTop: 40,
     paddingBottom: 10,
   },
   input: {
@@ -139,26 +229,35 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: '#fff',
     borderRadius: 9,
-    borderWidth: 1,
     margin: 10,
     padding: 10,
-    width: 200,
     backgroundColor: '#dbdbdb'
+  },
+  focusedInput: {
+    borderColor: '#80B905',
+    borderWidth: 1,
+
   },
   button: {
     elevation: 8,
     backgroundColor: '#80B905',
     borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    width: '100%'
+    padding: 15,
+    marginVertical: 25,
+    shadowColor: '#80B905',
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
   },
   loginBtn: {
     fontSize: 18,
     color: "#fff",
     fontWeight: "bold",
     alignSelf: "center",
-    textTransform: "uppercase"
+    fontFamily: Font["poppins-bold"],
 
   },
   background: {
@@ -170,6 +269,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  inputBlock: {
+    marginTop: 40,
+    marginBottom: 15,
+  }
 });
 
 export default LoginScreen;

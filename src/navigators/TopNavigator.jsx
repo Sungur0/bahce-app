@@ -17,16 +17,16 @@ const TopNavigator = () => {
         tabBarHideOnKeyboard: true,
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle:{
-          position:'absolute',
-          bottom:50,
-          left:20,
-          right:20,
-          elevation:0,
-          backgroundColor:'#fff',
-          borderRadius:15,
-          height:90
-        }
+        // tabBarStyle:{
+        //   position:'absolute',
+        //   bottom:50,
+        //   left:20,
+        //   right:20,
+        //   elevation:0,
+        //   backgroundColor:'#fff',
+        //   borderRadius:15,
+        //   height:90
+        // }
       }}>
       <Tab.Screen
         name="Home"
