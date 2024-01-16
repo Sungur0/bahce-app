@@ -45,7 +45,7 @@ const DetailScreen = () => {
           color='black'
           type='clear'
           icon={<Icon name="close" size={24} color="white" />}
-          style={{ marginLeft: 10 }}
+          style={{ marginLeft: 0}}
         />
       ),
     });

@@ -105,17 +105,25 @@ const LoginScreen = ({ navigation }) => {
 
 
       <View style={styles.container}>
-
         <View style={styles.inputBlock}>
-          <AppTextInput placeholder="Email"
-            value={email}
-            onChangeText={(text) => setEmail(text)} />
-          <AppTextInput
-            placeholder="Password"
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            secureTextEntry />
+
+          <Animated.View
+            entering={FadeInDown.duration(1000).springify()} >
+
+            <AppTextInput placeholder="Email"
+              value={email}
+              onChangeText={(text) => setEmail(text)} />
+          </Animated.View>
+          <Animated.View
+            entering={FadeInDown.duration(1000).springify()} >
+            <AppTextInput
+              placeholder="Password"
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+              secureTextEntry />
+          </Animated.View>
         </View>
+ 
 
         <Text style={{
           alignSelf: 'flex-end',
@@ -148,65 +156,65 @@ const LoginScreen = ({ navigation }) => {
 
 
         <Text
-            style={{
-              fontFamily: Font["poppins-semiBold"],
-              color: '#80B905',
-              textAlign: "center",
-              fontSize: 13,
-            }}
-          >
-            Ya da şununla devam et :
-          </Text>
+          style={{
+            fontFamily: Font["poppins-semiBold"],
+            color: '#80B905',
+            textAlign: "center",
+            fontSize: 13,
+          }}
+        >
+          Ya da şununla devam et :
+        </Text>
 
         <View
+          style={{
+            marginTop: 10,
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <TouchableOpacity
             style={{
-              marginTop: 10,
-              flexDirection: "row",
-              justifyContent: "center",
+              padding: 10,
+              backgroundColor: '#DBDBDB',
+              borderRadius: 5,
+              marginHorizontal: 10,
             }}
           >
-        <TouchableOpacity
-          style={{
-            padding: 10,
-            backgroundColor: '#DBDBDB',
-            borderRadius: 5,
-            marginHorizontal: 10,
-          }}
-        >
-          <Ionicons
-            name="logo-google"
-            color='#060606'
-            size={20}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            padding: 10,
-            backgroundColor: '#DBDBDB',
-            borderRadius: 5,
-            marginHorizontal: 10,
-          }}
-        >
-          <Ionicons
-            name="logo-apple"
-            color='#060606'
-            size={20}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            padding: 10,
-            backgroundColor: '#DBDBDB',
-            borderRadius: 5,
-            marginHorizontal: 10,
-          }}
-        >
-          <Ionicons
-            name="logo-facebook"
-            color='#060606'
-            size={20}
-          />
-        </TouchableOpacity>
+            <Ionicons
+              name="logo-google"
+              color='#060606'
+              size={20}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              backgroundColor: '#DBDBDB',
+              borderRadius: 5,
+              marginHorizontal: 10,
+            }}
+          >
+            <Ionicons
+              name="logo-apple"
+              color='#060606'
+              size={20}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              backgroundColor: '#DBDBDB',
+              borderRadius: 5,
+              marginHorizontal: 10,
+            }}
+          >
+            <Ionicons
+              name="logo-facebook"
+              color='#060606'
+              size={20}
+            />
+          </TouchableOpacity>
         </View>
       </View>
       {/* </KeyboardAvoidingView>

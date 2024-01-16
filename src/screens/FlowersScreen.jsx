@@ -5,6 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { FlatList, StyleSheet, TouchableOpacity, Image, Dimensions,Button } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
 import Feather from 'react-native-vector-icons/Feather';
+
+
+
  //   useLayoutEffect(() => {
   //     navigation.setOptions({
   //         headerRight: () => {
@@ -30,13 +33,14 @@ const FlowersScreen = () => {
   const numColumns = 3;
   const itemWidth = (Dimensions.get('window').width - 30) / numColumns;
 
-  const handleProductPress = (productId) => {
-    if (productId) {
-      navigation.navigate('Ürün Detayı', { productId });
-    }
-  };
+  
 
   const renderItems = ({ item }) => {
+    const handleProductPress = (productId) => {
+      if (productId) {
+        navigation.navigate('Ürün Detayı', { productId });
+      }
+    };
     return(
     <TouchableOpacity
       onPress={() => handleProductPress(item.id)}

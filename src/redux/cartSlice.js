@@ -8,10 +8,17 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const { userId, product } = action.payload;
-      if (!state[userId]) {
-        state[userId] = [];
+
+      // Eğer kullanıcının sepeti zaten oluşturulmuşsa, mevcut ürünleri kontrol et
+      if (state[userId]) {
+        // Eğer ürün daha önce eklenmemişse, ekleyin
+        if (product && product.id && !state[userId].some((item) => item.id === product.id)) {
+          state[userId].push(product);
+        }
+      } else {
+        // Eğer kullanıcının sepeti henüz oluşturulmamışsa, yeni bir dizi oluştur
+        state[userId] = product ? [product] : [];
       }
-      state[userId].push(product);
     },
     clearCart: (state, action) => {
       const userId = action.payload;
