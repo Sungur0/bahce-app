@@ -5,18 +5,19 @@ import { useSelector } from 'react-redux';
 
 
 export default function Carts() {
-  const cart = useSelector((state) => state.cart); // Redux store'daki cart bilgisini al
-
-
+  const userId = useSelector((state) => state.user.user.userId);
+  const cartItems = useSelector((state) => state.cart[userId] || []);
+    console.log(cartItems)
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sepet İçeriği</Text>
-      {Object.entries(cart).map(([userId, products]) => (
-        <View key={userId}>
-          <Text style={styles.userId}>Kullanıcı ID: {userId}</Text>
-          {products.map((product, index) => (
-            <Text key={index}>{product.name}</Text>
-          ))}
+    <View>
+      <Text>Sepetim</Text>
+      {cartItems.map((item) => (
+        <View key={item.id}>
+          
+          <Text>{item.name}</Text>
+          <Text>Fiyat: {item.price}</Text>
+          <Text>Fyok</Text>
+
         </View>
       ))}
     </View>

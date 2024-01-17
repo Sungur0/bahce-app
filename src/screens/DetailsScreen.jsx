@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState, useEffect } from 'react';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useProductContext } from '../context/ProductContext';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -9,6 +9,9 @@ import { Button } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import Modal from 'react-native-modal';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, removeFromCart } from '../redux/cartSlice';
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -18,7 +21,6 @@ const DetailScreen = () => {
   const route = useRoute();
   const [lightboxVisible, setLightboxVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [loading, setLoading] = useState(true);
   const { productId } = route.params;
   const navigation = useNavigation();
 
@@ -31,10 +33,6 @@ const DetailScreen = () => {
     setLightboxVisible(false);
   };
 
-  const handleImageLoad = () => {
-    setLoading(false);
-  };
-
   const product = products.find((item) => item.id === productId);
 
   useLayoutEffect(() => {
@@ -45,7 +43,7 @@ const DetailScreen = () => {
           color='black'
           type='clear'
           icon={<Icon name="close" size={24} color="white" />}
-          style={{ marginLeft: 0}}
+          style={{ marginLeft: 0 }}
         />
       ),
     });
@@ -86,6 +84,46 @@ const DetailScreen = () => {
     );
   };
 
+  // useEffect(() => {
+  //   const existingItem = cart.find((item) => item.id === product.id);
+  //   if (existingItem) {
+  //     setQuantity(existingItem.quantity); // Ürün sepete eklenmişse miktarını state'e yükle
+  //     setShowDropdown(true);
+  //   } else {
+  //     setQuantity(1); // Eğer ürün daha önce sepete eklenmemişse miktarı varsayılan olarak 1 yap
+  //   }
+  // }, [cart, product, setQuantity]);
+  
+  const dispatch = useDispatch();
+  const currentUserId = useSelector((state) => state.user.user.userId);
+  // const cart = useSelector((state) => state.cart[currentUserId] || []);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+
+  const handleSepeteEklePress = () => {
+    if (quantity > 0) {
+      dispatch(addToCart({ userId: currentUserId, product, quantity }));
+      setShowDropdown(true);
+      console.log(`Sepete eklenen ürün miktarı: ${quantity}`);
+    }
+  };
+
+
+
+
+  const handleIncrement = () => {
+    setQuantity(quantity + 1);
+  };
+
+
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    } else {
+      dispatch(removeFromCart({ userId: currentUserId, productId: product.id }));
+      setShowDropdown(false);
+    }
+  };
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}
@@ -159,9 +197,27 @@ const DetailScreen = () => {
       </ScrollView>
 
       <View style={styles.bottomContainer}>
-        <TouchableOpacity style={styles.sepeteEkleButton}>
-          <Text style={styles.sepeteEkleText}>Sepete Ekle</Text>
-        </TouchableOpacity>
+
+        {!showDropdown && (
+          <TouchableOpacity style={styles.sepeteEkleButton} onPress={handleSepeteEklePress}>
+            <Text style={styles.sepeteEkleText}>Sepete Ekle</Text>
+          </TouchableOpacity>
+
+        )}
+
+        {showDropdown && (
+          <View style={[styles.sepeteEkleButton, { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, flex: 1 }]}>
+            <TouchableOpacity onPress={handleIncrement}>
+              <Text style={styles.sepeteEkleText}>+art</Text>
+            </TouchableOpacity>
+
+            <Text style={{ fontSize: 15, backgroundColor: '#D4D4D4', height: '100%', width: '33%', textAlign: 'center', }}>{quantity}</Text>
+
+            <TouchableOpacity onPress={handleDecrement}>
+              <Text style={styles.sepeteEkleText}>-azalt</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
     </SafeAreaView>

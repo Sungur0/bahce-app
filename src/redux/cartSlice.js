@@ -1,23 +1,31 @@
-// cartSlice.js
-
 import { createSlice } from '@reduxjs/toolkit';
 
 const cartSlice = createSlice({
   name: 'cart',
-  initialState: {},
+  initialState: {}, // Başlangıç durumu uygun şekilde düzenlendi
   reducers: {
     addToCart: (state, action) => {
-      const { userId, product } = action.payload;
+      const { userId, product, quantity } = action.payload;
 
-      // Eğer kullanıcının sepeti zaten oluşturulmuşsa, mevcut ürünleri kontrol et
       if (state[userId]) {
-        // Eğer ürün daha önce eklenmemişse, ekleyin
-        if (product && product.id && !state[userId].some((item) => item.id === product.id)) {
-          state[userId].push(product);
+        const existingItem = state[userId].find((item) => item.id === product.id);
+
+        if (existingItem) {
+          // Eğer ürün zaten sepette varsa sadece miktarını arttır
+          existingItem.quantity += quantity;
+        } else {
+          state[userId].push({ ...product, quantity });
         }
       } else {
-        // Eğer kullanıcının sepeti henüz oluşturulmamışsa, yeni bir dizi oluştur
-        state[userId] = product ? [product] : [];
+        state[userId] = [{ ...product, quantity }];
+      }
+    },
+    removeFromCart: (state, action) => {
+      const { userId, productId } = action.payload;
+
+      if (state[userId]) {
+        const updatedCart = state[userId].filter((item) => item.id !== productId);
+        state[userId] = updatedCart;
       }
     },
     clearCart: (state, action) => {
@@ -27,5 +35,5 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;
