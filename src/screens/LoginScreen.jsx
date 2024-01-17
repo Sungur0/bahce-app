@@ -1,6 +1,6 @@
 // LoginScreen.js
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,13 +13,14 @@ import {
   Keyboard,
   TouchableOpacity
 } from 'react-native';
+
 import { Ionicons } from "@expo/vector-icons";
 import AppTextInput from "../components/appTextInput";
 import Font from "../constants/Font";
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../redux/userSlice';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const backgroundImage = require('../../assets/background.png');
 
 
@@ -33,35 +34,62 @@ const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
+  useEffect(() => {
+    const loadStoredUser = async () => {
+      try {
+        // AsyncStorage'den kullanıcı bilgilerini al
+        const userToken = await AsyncStorage.getItem('userToken');
+
+        if (userToken) {
+          const userData = JSON.parse(userToken);
+
+          // Redux store'a kullanıcı bilgilerini ekleyerek oturumu başlat
+          dispatch(login(userData));
+        }
+      } catch (error) {
+        console.error('Error initializing user', error);
+      }
+    };
+
+    // Uygulama başlangıcında AsyncStorage'den kullanıcı bilgilerini yükle
+    loadStoredUser();
+  }, [dispatch]);
+
+  const handleLogin = async () => {
     // Kullanıcı giriş yapmışsa, home ekranına yönlendirme
     if (isLoggedIn) {
       navigation.replace('Tab');
     } else {
-      // Redux store'dan alınan üye bilgileri ile giriş kontrolü
-      if (email === storedUserData.email && password === storedUserData.password) {
-        // Giriş başarılı ise kullanıcı bilgilerini döndür
-        const userData = {
-          userId: storedUserData.userId,
-          username: storedUserData.username,
-          email: storedUserData.email,
-        };
+      try {
+        // AsyncStorage'den kullanıcı bilgilerini al
+        const userToken = await AsyncStorage.getItem('userToken');
 
-        // Redux store'a kullanıcıyı ekleyelim
-        dispatch(login(userData));
+        if (userToken) {
+          const userData = JSON.parse(userToken);
 
-        // Giriş yapıldıktan sonra home ekranına yönlendirme
-        navigation.replace('Tab');
-      } else {
-        // Giriş başarısız ise hata bilgisi döndür
-        Alert.alert('Hata', 'Giriş başarısız. Lütfen e-posta ve şifrenizi kontrol edin.');
+          // Kullanıcının girdiği bilgilerle AsyncStorage'ten çekilen bilgileri karşılaştır
+          if (email === userData.email && password === userData.password) {
+            // Giriş başarılı ise kullanıcı bilgilerini Redux store'a ekleyelim
+            dispatch(login(userData));
+
+            // Giriş yapıldıktan sonra home ekranına yönlendirme
+            navigation.replace('Tab');
+          } else {
+            // Giriş başarısız ise hata mesajı göster
+            Alert.alert('Hata', 'Giriş başarısız. Lütfen e-posta ve şifrenizi kontrol edin.');
+          }
+        } else {
+          // Kayıtlı kullanıcı bilgisi bulunamadı
+          Alert.alert('Hata', 'Kayıtlı kullanıcı bilgisi bulunamadı.');
+        }
+      } catch (error) {
+        console.error('Error during login', error);
       }
     }
   };
 
 
   const handleSignUpNavigation = () => {
-    // Üye olma ekranına yönlendirme
     navigation.navigate('Signup');
   };
 

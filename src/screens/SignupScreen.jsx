@@ -1,9 +1,9 @@
 // SignUpScreen.js
-
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login } from '../redux/userSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import AppTextInput from "../components/appTextInput";
 import Font from "../constants/Font";
@@ -11,59 +11,57 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Ionicons } from "@expo/vector-icons";
 
-
 const backgroundImage = require('../../assets/background.png');
 
 const SignUpScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
-  const [userName, setUserName] = useState('')
+  const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
-
   const isEmailValid = () => {
-    // Regular expression for a simple email validation
+    // Basit bir e-posta doğrulama için düzenli ifade
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  const handleSignUp = () => {
-
+  const handleSignUp = async () => {
     if (!isEmailValid()) {
-      console.log('Invalid email');
-      return; // Do not proceed if email is invalid
+      console.log('Geçersiz e-posta');
+      return; // E-posta geçerli değilse devam etme
     }
+
     // Eğer gerçek bir üyelik işlemi yapılıyorsa, bu kısmı uygun şekilde güncelleyin.
     // Örneğin, bir API çağrısı kullanabilirsiniz.
     const randomUserId = Math.floor(Math.random() * 1000) + 1;
-    // Üyelik işlemi tamamlandıktan sonra isteğe bağlı olarak giriş yapabilirsiniz.
-    // Ayrıca, giriş işlemi burada yapılıyor gibi düşünülebilir.
     const userData = {
       userId: randomUserId,
-      username: userName, // Gerçek bir kullanıcı adı ekleyin
+      username: userName,
       email: email,
       password: password,
     };
 
+    try {
+      // Kullanıcı bilgilerini AsyncStorage'e kaydet
+      await AsyncStorage.setItem('userToken', JSON.stringify(userData));
+      // Redux store'a kullanıcıyı ekleyelim
+      dispatch(login(userData));
+      console.log(userData);
 
-    // Redux store'a kullanıcıyı ekleyelim
-    dispatch(login(userData));
-
-    console.log(userData)
-
-    // Giriş yapıldıktan sonra istediğiniz sayfaya yönlendirme
-    navigation.navigate('Login');
+      // Giriş yapıldıktan sonra istediğiniz sayfaya yönlendirme
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('Kullanıcı bilgileri kaydedilirken bir hata oluştu', error);
+    }
   };
+
   const handleSignIn = () => {
-    // Üye olma ekranına yönlendirme
+    // Giriş ekranına yönlendirme
     navigation.navigate('Login');
   };
 
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
-      {/* <TouchableOpacity onPress={handleSignIn} style={styles.closeButton}>
-        <Icon name="close" size={27} color="white" />
-      </TouchableOpacity> */}
       <View style={styles.container}>
 
         <Animated.View style={styles.light}>
@@ -71,14 +69,12 @@ const SignUpScreen = ({ navigation }) => {
             entering={FadeInUp.delay(200).duration(1000).springify()}
             source={require('../../assets/light.png')}
             style={{ height: 225, width: 90, opacity: 1 }}
-
           />
           <Animated.Image
             entering={FadeInUp.delay(400).duration(1100).springify()}
             source={require('../../assets/light.png')}
             style={{ height: 160, width: 65, opacity: 0.75 }}
           />
-
         </Animated.View>
 
         <View style={{ top: 0, alignItems: 'center', }}>
@@ -94,9 +90,7 @@ const SignUpScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.inputBlock}>
-          <Animated.View
-            entering={FadeInDown.duration(1000).springify()} >
-
+          <Animated.View entering={FadeInDown.duration(1000).springify()} >
             <AppTextInput
               placeholder="İsminizi giriniz"
               value={userName}
@@ -104,32 +98,25 @@ const SignUpScreen = ({ navigation }) => {
             />
           </Animated.View>
 
-          <Animated.View
-            entering={FadeInDown.duration(1000).springify()} >
-
-            <AppTextInput placeholder="Email"
+          <Animated.View entering={FadeInDown.duration(1000).springify()} >
+            <AppTextInput
+              placeholder="Email"
               value={email}
               onChangeText={(text) => setEmail(text)}
               secureTextEntry={false}
               keyboardType="email-address"
-
             />
           </Animated.View>
-          <Animated.View
-            entering={FadeInDown.duration(1000).springify()} >
 
-            <AppTextInput placeholder="Password"
+          <Animated.View entering={FadeInDown.duration(1000).springify()} >
+            <AppTextInput
+              placeholder="Password"
               value={password}
               onChangeText={(text) => setPassword(text)}
               secureTextEntry
-
-
             />
           </Animated.View>
         </View>
-
-
-
 
         <TouchableOpacity onPress={handleSignUp} style={styles.button}>
           <Text style={styles.loginBtn}>Hesabını Oluştur</Text>
@@ -161,7 +148,7 @@ const SignUpScreen = ({ navigation }) => {
             fontSize: 13,
           }}
         >
-          Ya da şununla devam et :
+          Ya da şununla devam et:
         </Text>
 
         <View
@@ -216,7 +203,6 @@ const SignUpScreen = ({ navigation }) => {
         </View>
       </View>
     </ImageBackground>
-
   );
 };
 

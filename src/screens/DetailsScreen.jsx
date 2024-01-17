@@ -204,12 +204,13 @@ const DetailScreen = () => {
           </TouchableOpacity>
 
         )}
-
+ 
         {showDropdown && (
           <View style={[styles.sepeteEkleButton, { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, flex: 1 }]}>
             <TouchableOpacity onPress={handleIncrement}>
               <Text style={styles.sepeteEkleText}>+art</Text>
             </TouchableOpacity>
+
 
             <Text style={{ fontSize: 15, backgroundColor: '#D4D4D4', height: '100%', width: '33%', textAlign: 'center', }}>{quantity}</Text>
 
@@ -219,6 +220,7 @@ const DetailScreen = () => {
           </View>
         )}
       </View>
+       
 
     </SafeAreaView>
   );
