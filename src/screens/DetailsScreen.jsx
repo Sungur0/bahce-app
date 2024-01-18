@@ -9,9 +9,10 @@ import { Button } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import Modal from 'react-native-modal';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
+import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, removeFromCart } from '../redux/cartSlice';
+import { addToCart, removeFromCart, decreaseQuantity } from '../redux/cartSlice';
+import Font from "../constants/Font";
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -84,46 +85,37 @@ const DetailScreen = () => {
     );
   };
 
-  // useEffect(() => {
-  //   const existingItem = cart.find((item) => item.id === product.id);
-  //   if (existingItem) {
-  //     setQuantity(existingItem.quantity); // Ürün sepete eklenmişse miktarını state'e yükle
-  //     setShowDropdown(true);
-  //   } else {
-  //     setQuantity(1); // Eğer ürün daha önce sepete eklenmemişse miktarı varsayılan olarak 1 yap
-  //   }
-  // }, [cart, product, setQuantity]);
-  
+
+  const userId = useSelector((state) => state.user.user.userId);
+
   const dispatch = useDispatch();
-  const currentUserId = useSelector((state) => state.user.user.userId);
-  // const cart = useSelector((state) => state.cart[currentUserId] || []);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [quantity, setQuantity] = useState(1);
 
-  const handleSepeteEklePress = () => {
-    if (quantity > 0) {
-      dispatch(addToCart({ userId: currentUserId, product, quantity }));
-      setShowDropdown(true);
-      console.log(`Sepete eklenen ürün miktarı: ${quantity}`);
+  const handleAddToCart = () => {
+    dispatch(addToCart({ userId, product }));
+  };
+
+  const cart = useSelector((state) => state.cart[userId] || []);
+  const quantityInCart = cart.find(cartProduct => cartProduct.id === product.id)?.quantity || 0;
+
+  // console.log(quantityInCart)
+  const handleIncreaseQuantity = () => {
+    // Ürün miktarını artırma işlemi
+    // Eğer ürünü sepete ilk defa ekliyorsanız addToCart fonksiyonu kullanılabilir
+    dispatch(addToCart({ userId, product }));
+  };
+
+  const handleDecreaseQuantity = () => {
+    if (product.quantity < 1) {
+      dispatch(removeFromCart({ userId, productId: product.id }));
+    }
+    else {
+      dispatch(decreaseQuantity({ userId, productId: product.id }));
+
     }
   };
 
 
 
-
-  const handleIncrement = () => {
-    setQuantity(quantity + 1);
-  };
-
-
-  const handleDecrement = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    } else {
-      dispatch(removeFromCart({ userId: currentUserId, productId: product.id }));
-      setShowDropdown(false);
-    }
-  };
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}
@@ -164,6 +156,8 @@ const DetailScreen = () => {
             style={styles.modal}
             backdropOpacity={1}
           >
+
+
             <View>
               <TouchableOpacity onPress={closeLightbox} style={styles.closeButton}>
                 <Icon name="close" size={27} color="white" />
@@ -171,6 +165,8 @@ const DetailScreen = () => {
               <Image source={selectedImage} style={{ height: 300, resizeMode: 'contain', backgroundColor: '#fff', alignSelf: 'center' }} />
             </View>
           </Modal>
+
+
 
           <View style={styles.productDetail}>
             <Text style={styles.price}>{product.price}</Text>
@@ -198,29 +194,42 @@ const DetailScreen = () => {
 
       <View style={styles.bottomContainer}>
 
-        {!showDropdown && (
-          <TouchableOpacity style={styles.sepeteEkleButton} onPress={handleSepeteEklePress}>
-            <Text style={styles.sepeteEkleText}>Sepete Ekle</Text>
-          </TouchableOpacity>
-
+        {quantityInCart < 1 && (
+          <Animated.View
+            entering={FadeInDown.duration(1000).springify()} >
+            <TouchableOpacity style={styles.sepeteEkleButton} onPress={handleAddToCart} >
+              <Text style={styles.sepeteEkleText}>Sepete Ekle</Text>
+            </TouchableOpacity>
+          </Animated.View>
         )}
- 
-        {showDropdown && (
-          <View style={[styles.sepeteEkleButton, { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, flex: 1 }]}>
-            <TouchableOpacity onPress={handleIncrement}>
-              <Text style={styles.sepeteEkleText}>+art</Text>
+
+
+        {!quantityInCart < 1 && (
+
+
+          <Animated.View
+            entering={FadeInDown.duration(1000).springify()}
+            style={[styles.sepeteEkleButton, { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, flex: 1 }]}>
+
+            <TouchableOpacity onPress={handleIncreaseQuantity} >
+              <Text style={styles.sepeteEkleText}>+</Text>
             </TouchableOpacity>
 
 
-            <Text style={{ fontSize: 15, backgroundColor: '#D4D4D4', height: '100%', width: '33%', textAlign: 'center', }}>{quantity}</Text>
+            <Text
+              style={{ fontSize: 15, backgroundColor: '#D4D4D4', height: '100%',textAlign: 'center', paddingVertical: 15,fontSize:18,paddingHorizontal:30 ,fontFamily: Font["poppins-regular"],
+            }}>
+              {quantityInCart}
+            </Text>
 
-            <TouchableOpacity onPress={handleDecrement}>
-              <Text style={styles.sepeteEkleText}>-azalt</Text>
+            <TouchableOpacity onPress={handleDecreaseQuantity} >
+              <Text style={styles.sepeteEkleText}>-</Text>
             </TouchableOpacity>
-          </View>
+          </Animated.View>
         )}
+
       </View>
-       
+
 
     </SafeAreaView>
   );
@@ -235,6 +244,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 15,
   },
   bottomContainer: {
+
     position: 'absolute',
     bottom: 0,
     left: 0,
@@ -259,21 +269,28 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     marginBottom: 5,
+    fontFamily: Font["poppins-bold"],
+
   },
   description: {
     textAlign: 'center',
     fontSize: 14,
     marginBottom: 10,
+    fontFamily: Font["poppins-regular"],
+    
   },
   price: {
     fontSize: 20,
     fontWeight: 'bold',
+    fontFamily: Font["poppins-bold"],
     color: 'green',
   },
   productDetail: {
+
     flex: 1,
     alignItems: 'center',
     padding: 16,
+    
   },
   dot: {
     width: 10,
@@ -294,17 +311,18 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   sepeteEkleButton: {
-    width: '95s%',
+    width: '95%',
     backgroundColor: '#80B905',
-    paddingVertical: 15,
     alignItems: 'center',
     borderRadius: 10,
     marginHorizontal: 10,
   },
   sepeteEkleText: {
+    paddingVertical: 15,
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+    
   },
 });
 

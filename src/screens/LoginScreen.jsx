@@ -30,7 +30,6 @@ const LoginScreen = ({ navigation }) => {
   const [isFocused, setIsFocused] = useState(false);
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const storedUserData = useSelector((state) => state.user.user);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

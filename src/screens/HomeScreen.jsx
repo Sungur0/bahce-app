@@ -12,6 +12,8 @@ const HomeScreen = () => {
 
     const { featuredProducts, getProductsByCategory } = useProductContext();
 
+
+
     // useLayoutEffect(() => {
     //     navigation.setOptions({
     //         headerRight: () => {
@@ -60,7 +62,6 @@ const HomeScreen = () => {
             
         </TouchableOpacity>
     );
-
     return (
         // <SafeAreaView style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>

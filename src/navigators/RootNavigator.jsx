@@ -15,6 +15,7 @@ const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
     return (
 
         <Stack.Navigator initialRouteName={isLoggedIn ? 'Tab' : 'Login'} screenOptions={{
@@ -27,7 +28,6 @@ export default function RootNavigator() {
                 open: { animation: 'slide_from_bottom', config: { duration: 150 } },
                 close: { animation: 'slide_from_bottom', config: { duration: 50 } },
             },
-
         }} >
             <Stack.Screen name="Tab"
                 component={TopNavigator}
@@ -45,15 +45,15 @@ export default function RootNavigator() {
                 tabBarButton: () => null,
                 tabBarVisible: false,
                 headerStyle: {
-                    backgroundColor: '#80B905',
+                    backgroundColor: '#80B905',                    
                 },
                 animation: 'fade_from_bottom',
 
 
             }} />
             <Stack.Screen name="Sepetim" component={Carts} />
-            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, animation:'fade_from_bottom'  }} />
-            <Stack.Screen name="Signup" component={SignUpScreen} options={{ headerShown: false, animation:'fade_from_bottom' }} />
+            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, animation: 'fade_from_bottom' }} />
+            <Stack.Screen name="Signup" component={SignUpScreen} options={{ headerShown: false, animation: 'fade_from_bottom' }} />
 
 
             <Stack.Screen

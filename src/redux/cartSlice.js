@@ -1,31 +1,36 @@
+// cartSlice.js
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const cartSlice = createSlice({
   name: 'cart',
-  initialState: {}, // Başlangıç durumu uygun şekilde düzenlendi
+  initialState: {},
   reducers: {
     addToCart: (state, action) => {
-      const { userId, product, quantity } = action.payload;
-
-      if (state[userId]) {
-        const existingItem = state[userId].find((item) => item.id === product.id);
-
-        if (existingItem) {
-          // Eğer ürün zaten sepette varsa sadece miktarını arttır
-          existingItem.quantity += quantity;
-        } else {
-          state[userId].push({ ...product, quantity });
-        }
+      const { userId, product } = action.payload;
+      state[userId] = state[userId] ? [...state[userId]] : [];
+      const existingProduct = state[userId].find(p => p.id === product.id);
+      if (existingProduct) {
+        existingProduct.quantity += 1;
       } else {
-        state[userId] = [{ ...product, quantity }];
+        state[userId].push({ ...product, quantity: 1 });
       }
     },
     removeFromCart: (state, action) => {
       const { userId, productId } = action.payload;
+      state[userId] = state[userId].filter(product => product.id !== productId);
+    },
+    decreaseQuantity: (state, action) => {
+      const { userId, productId } = action.payload;
+      const product = state[userId].find(p => p.id === productId);
 
-      if (state[userId]) {
-        const updatedCart = state[userId].filter((item) => item.id !== productId);
-        state[userId] = updatedCart;
+      if (product) {
+        if (product.quantity > 1) {
+          product.quantity -= 1;
+        } else {
+          const updatedCart = state[userId].filter(p => p.id !== productId);
+          state[userId] = updatedCart;
+        }
       }
     },
     clearCart: (state, action) => {
@@ -35,5 +40,13 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, decreaseQuantity, clearCart } = cartSlice.actions;
+
+// Calculate total price function
+export const selectTotalPrice = (state, userId) => {
+  return state.cart[userId]?.reduce((total, product) => {
+    return total + product.quantity * product.price;
+  }, 0) || 0;
+};
+
 export default cartSlice.reducer;

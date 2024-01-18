@@ -13,21 +13,10 @@ const TopNavigator = () => {
   return (
     <Tab.Navigator
   
-      screenOptions={{
-        tabBarHideOnKeyboard: true,
-        headerShown: false,
-        tabBarShowLabel: false,
-        // tabBarStyle:{
-        //   position:'absolute',
-        //   bottom:50,
-        //   left:20,
-        //   right:20,
-        //   elevation:0,
-        //   backgroundColor:'#fff',
-        //   borderRadius:15,
-        //   height:90
-        // }
-      }}>
+    screenOptions={{
+      headerShown: true, // Set this to false if you want to hide the header for all screens
+      headerTitleAlign: 'center', // Align the title to the center
+    }}>
       <Tab.Screen
         name="Home"
         component={HomeScreen}
