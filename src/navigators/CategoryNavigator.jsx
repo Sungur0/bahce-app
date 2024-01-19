@@ -15,6 +15,9 @@ const CategoryNavigator = () => (
   screenOptions={{
     tabBarScrollEnabled: true,
     tabBarLabelStyle: { fontSize: 13, textTransform: 'capitalize' },
+    headerBackTitleStyle: {
+      color: '#fff', 
+    },
     tabBarItemStyle: { width: 100 },
     tabBarIndicatorStyle: { backgroundColor: '#FD8407' },
   }}

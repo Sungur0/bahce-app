@@ -31,15 +31,7 @@ export default function RootNavigator() {
         }} >
             <Stack.Screen name="Tab"
                 component={TopNavigator}
-                options={{
-                    headerTitle: (props) => (
-                        <Image
-                            resizeMode='center'
-                            style={{ width: 180, height: 33, resizeMode: 'contain' }}
-                            source={require('../../assets/logo1.png')}
-                        />
-                    ),
-                }}
+                options={{    headerShown: false,}}
             />
             <Stack.Screen name="Ürün Detayı" component={DetailsScreen} options={{
                 tabBarButton: () => null,
@@ -48,7 +40,9 @@ export default function RootNavigator() {
                     backgroundColor: '#80B905',                    
                 },
                 animation: 'fade_from_bottom',
-
+                headerTitleStyle: {
+                    color: '#fff', 
+                  },
 
             }} />
             <Stack.Screen name="Sepetim" component={Carts} />
@@ -63,6 +57,13 @@ export default function RootNavigator() {
                     headerTitle: 'Ürünler',
                     headerBackTitleVisible: false,
                     animation: 'slide_from_right',
+                    headerStyle: {
+                        backgroundColor: '#80B905',                    
+                    },      
+                    headerTitleStyle: {
+                        color: '#fff', 
+                      },
+                     
                 }}
             />
             <Stack.Screen
@@ -72,6 +73,10 @@ export default function RootNavigator() {
                     headerTitle: 'Öne Çıkarılan Ürünler',
                     headerBackTitleVisible: false,
                     // animation: 'slide_from_right',
+                    headerTitleStyle: {
+                        color: '#fff', 
+                      },
+               
                 }}
             />
 

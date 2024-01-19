@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text ,Image} from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import Carts from '../screens/Carts';
@@ -8,7 +8,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 
 const Tab = createBottomTabNavigator();
-
+// options={{
+  
+// }}
 const TopNavigator = () => {
   return (
     <Tab.Navigator
@@ -23,7 +25,14 @@ const TopNavigator = () => {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" size={size} color={color} />
-          )
+          ),
+          headerTitle: (props) => (
+            <Image
+                resizeMode='center'
+                style={{ width: 180, height: 33, resizeMode: 'contain' }}
+                source={require('../../assets/logo1.png')}
+            />
+        ),
         }}
 
       />
@@ -34,12 +43,12 @@ const TopNavigator = () => {
         component={Carts}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Feather name='shopping-cart' size={size} color={color} />
-          )
+            <Feather name='shopping-cart' size={size} color={color} />          
+          ),   
         }}
       />
        <Tab.Screen
-        name="Account"
+        name="Hesabım"
         component={Account}
         options={{
           tabBarIcon: ({ color, size }) => (
