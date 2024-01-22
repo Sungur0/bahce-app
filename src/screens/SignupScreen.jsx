@@ -29,7 +29,7 @@ const SignUpScreen = ({ navigation }) => {
 
     if (!isEmailValid()) {
       console.log('Invalid email');
-      return; // Do not proceed if email is invalid
+      return;  
     }
     // Eğer gerçek bir üyelik işlemi yapılıyorsa, bu kısmı uygun şekilde güncelleyin.
     // Örneğin, bir API çağrısı kullanabilirsiniz.
