@@ -42,10 +42,21 @@ const cartSlice = createSlice({
 
 export const { addToCart, removeFromCart, decreaseQuantity, clearCart } = cartSlice.actions;
 
-// Calculate total price function
 export const selectTotalPrice = (state, userId) => {
   return state.cart[userId]?.reduce((total, product) => {
     return total + product.quantity * product.price;
+  }, 0) || 0;
+};
+
+export const selectTotalDiscountedPrice = (state, userId) => {
+  return state.cart[userId]?.reduce((total, product) => {
+    return total + product.quantity * (product.price - (product.discount || 0));
+  }, 0) || 0;
+};
+
+export const selectTotalDiscountAmount = (state, userId) => {
+  return state.cart[userId]?.reduce((total, product) => {
+    return total + product.quantity * (product.discount || 0);
   }, 0) || 0;
 };
 

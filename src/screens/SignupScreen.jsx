@@ -25,34 +25,32 @@ const SignUpScreen = ({ navigation }) => {
     return emailRegex.test(email);
   };
 
-  const handleSignUp = async () => {
-    if (!isEmailValid()) {
-      console.log('Geçersiz e-posta');
-      return; // E-posta geçerli değilse devam etme
-    }
+  const handleSignUp = () => {
 
+    if (!isEmailValid()) {
+      console.log('Invalid email');
+      return; // Do not proceed if email is invalid
+    }
     // Eğer gerçek bir üyelik işlemi yapılıyorsa, bu kısmı uygun şekilde güncelleyin.
     // Örneğin, bir API çağrısı kullanabilirsiniz.
     const randomUserId = Math.floor(Math.random() * 1000) + 1;
+    // Üyelik işlemi tamamlandıktan sonra isteğe bağlı olarak giriş yapabilirsiniz.
+    // Ayrıca, giriş işlemi burada yapılıyor gibi düşünülebilir.
     const userData = {
       userId: randomUserId,
-      username: userName,
+      username: userName, // Gerçek bir kullanıcı adı ekleyin
       email: email,
       password: password,
     };
 
-    try {
-      // Kullanıcı bilgilerini AsyncStorage'e kaydet
-      await AsyncStorage.setItem('userToken', JSON.stringify(userData));
-      // Redux store'a kullanıcıyı ekleyelim
-      dispatch(login(userData));
-      console.log(userData);
 
-      // Giriş yapıldıktan sonra istediğiniz sayfaya yönlendirme
-      navigation.navigate('Login');
-    } catch (error) {
-      console.error('Kullanıcı bilgileri kaydedilirken bir hata oluştu', error);
-    }
+    // Redux store'a kullanıcıyı ekleyelim
+    dispatch(login(userData));
+
+    console.log(userData)
+
+    // Giriş yapıldıktan sonra istediğiniz sayfaya yönlendirme
+    navigation.navigate('Login');
   };
 
   const handleSignIn = () => {

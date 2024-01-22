@@ -9,6 +9,7 @@ import TopNavigator from './TopNavigator';
 import CategoryNavigator from './CategoryNavigator';
 import FeaturedProductsScreen from '../screens/FeaturedProducts';
 import SignUpScreen from '../screens/SignupScreen';
+import ShoppingPay from '../screens/ShoppingPay';
 import { useSelector } from 'react-redux';
 
 const Stack = createNativeStackNavigator();
@@ -31,18 +32,18 @@ export default function RootNavigator() {
         }} >
             <Stack.Screen name="Tab"
                 component={TopNavigator}
-                options={{    headerShown: false,}}
+                options={{ headerShown: false, }}
             />
             <Stack.Screen name="Ürün Detayı" component={DetailsScreen} options={{
                 tabBarButton: () => null,
                 tabBarVisible: false,
                 headerStyle: {
-                    backgroundColor: '#80B905',                    
+                    backgroundColor: '#80B905',
                 },
                 animation: 'fade_from_bottom',
                 headerTitleStyle: {
-                    color: '#fff', 
-                  },
+                    color: '#fff',
+                },
 
             }} />
             <Stack.Screen name="Sepetim" component={Carts} />
@@ -57,13 +58,12 @@ export default function RootNavigator() {
                     headerTitle: 'Ürünler',
                     headerBackTitleVisible: false,
                     animation: 'slide_from_right',
-                    headerStyle: {
-                        backgroundColor: '#80B905',                    
-                    },      
-                    headerTitleStyle: {
-                        color: '#fff', 
-                      },
-                     
+                    headerStyle:{
+                    backgroundColor: '#80B905',
+                    },
+                    headerTintColor: '#fff', 
+             
+
                 }}
             />
             <Stack.Screen
@@ -72,12 +72,20 @@ export default function RootNavigator() {
                 options={{
                     headerTitle: 'Öne Çıkarılan Ürünler',
                     headerBackTitleVisible: false,
-                    // animation: 'slide_from_right',
-                    headerTitleStyle: {
-                        color: '#fff', 
-                      },
-               
                 }}
+            />
+            <Stack.Screen
+                name="Ödeme Yap"
+                component={ShoppingPay}
+                options={{
+                    headerStyle:{
+                    backgroundColor: '#80B905',
+                    },
+                    headerTintColor: '#fff', 
+                    animation: 'slide_from_right',
+
+                }}
+
             />
 
         </Stack.Navigator>

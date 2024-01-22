@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { FlatList, StyleSheet, TouchableOpacity, Image, Dimensions,Button } from 'react-native';
 import { ScrollView } from 'react-native-virtualized-view';
 import Feather from 'react-native-vector-icons/Feather';
+import Font from "../constants/Font";
+import { commonStyles } from '../commonStyle';
 
 
 
@@ -49,14 +51,14 @@ const FlowersScreen = () => {
 
       <Image source={item.src} style={styles.itemImage} />
 
-      <View style={styles.priceContainer}>
+      <View style={commonStyles.priceContainer}>
         {item.discount && (
-          <View style={styles.discountContainer}>
-            <Text style={styles.discountText}>{item.discount}</Text>
+          <View style={commonStyles.discountContainer}>
+            <Text style={commonStyles.discountText}>₺{item.discount}</Text>
           </View>
         )}
-        <Text style={[styles.itemPrice, !item.discount && styles.discountedPrice]}>
-          {item.price}
+        <Text style={[commonStyles.itemPrice, !item.discount && commonStyles.discountedPrice]}>
+         ₺{item.price}
         </Text>
       </View>
       <Text style={styles.itemName}>{item.name}</Text>
@@ -85,27 +87,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  addBtn: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    backgroundColor: '#fff',
-    top: 12,
-    right: 2,
-    zIndex: 2,
-    padding: 5,
-    borderRadius: 5,
-    width: 30,
-    height: 30,
-    borderWidth: 0.1,
-    borderColor: '#80B905',
-    shadowColor: '#80B905',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.7,
-    shadowRadius: 1,
-    elevation: 3, 
-  },
+
   itemList: {
     marginTop: 10,
     flexDirection: 'column',
@@ -124,8 +106,8 @@ const styles = StyleSheet.create({
   itemName: {
     textAlign: 'center',
     width: '100%',
-    marginLeft: 0,
     fontSize: 13,
+    fontFamily: Font["poppins-regular"],
   },
   itemImage: {
     width: '100%',
@@ -136,28 +118,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#dbdbdb',
 
   },
-  priceContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 2,
-  },
-  itemPrice: {
-    fontSize: 14,
-    color: 'green',
-  },
-  discountContainer: {
-    padding: 5,
-  },
-  discountedPrice: {
-    marginLeft: 0,
-    width: '100%',
-    textAlign: 'center',
-  },
-  discountText: {
-    color: 'grey',
-    textDecorationLine: 'line-through',
-    textDecorationStyle: 'solid',
-  },
+
 
 });
 

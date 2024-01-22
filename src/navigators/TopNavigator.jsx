@@ -1,4 +1,4 @@
-import { View, Text ,Image} from 'react-native'
+import { View, Text, Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import Carts from '../screens/Carts';
@@ -7,18 +7,23 @@ import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 
+
+
 const Tab = createBottomTabNavigator();
-// options={{
-  
-// }}
+
+
 const TopNavigator = () => {
   return (
     <Tab.Navigator
-  
-    screenOptions={{
-      headerShown: true, // Set this to false if you want to hide the header for all screens
-      headerTitleAlign: 'center', // Align the title to the center
-    }}>
+      screenOptions={{
+        headerShown: true,
+        headerTitleAlign: 'center',
+        tabBarActiveTintColor: '#80B905',
+        tabBarInactiveTintColor:'gray'
+      }}
+
+      >
+
       <Tab.Screen
         name="Home"
         component={HomeScreen}
@@ -28,11 +33,11 @@ const TopNavigator = () => {
           ),
           headerTitle: (props) => (
             <Image
-                resizeMode='center'
-                style={{ width: 180, height: 33, resizeMode: 'contain' }}
-                source={require('../../assets/logo1.png')}
+              resizeMode='center'
+              style={{ width: 180, height: 33, resizeMode: 'contain' }}
+              source={require('../../assets/logo1.png')}
             />
-        ),
+          ),
         }}
 
       />
@@ -43,11 +48,11 @@ const TopNavigator = () => {
         component={Carts}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Feather name='shopping-cart' size={size} color={color} />          
-          ),   
+            <Feather name='shopping-cart' size={size} color={color} />
+          ),
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name="Hesabım"
         component={Account}
         options={{
@@ -56,7 +61,7 @@ const TopNavigator = () => {
           )
         }}
       />
-
+   
     </Tab.Navigator>
   )
 }

@@ -5,12 +5,13 @@ import { useProductContext } from '../context/ProductContext';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Carousel, { ParallaxImage, Pagination } from 'react-native-snap-carousel';
 import Feather from 'react-native-vector-icons/Feather';
+import Font from "../constants/Font";
 
 const HomeScreen = () => {
 
     const navigation = useNavigation();
 
-    const { featuredProducts, getProductsByCategory } = useProductContext();
+    const { featuredProducts } = useProductContext();
 
 
 
@@ -59,90 +60,90 @@ const HomeScreen = () => {
     const CustomButton = ({ title, onPress }) => (
         <TouchableOpacity onPress={onPress} style={styles.button}>
             <Text style={styles.buttonText}>{title}</Text>
-            
+
         </TouchableOpacity>
     );
     return (
         // <SafeAreaView style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+
+            <View>
+                <Carousel
+                    data={data}
+                    loop={true}
+                    autoplay={true}
+                    renderItem={ItemCard}
+                    sliderWidth={wp(100)}
+                    firstItem={1}
+                    itemWidth={wp(100) - 45}
+                    slideStyle={{ display: 'flex', alignItems: 'center', borderRadius: 20, }}
+                />
+            </View>
+
+            <View style={styles.itemList} >
+                {categories.map((category) => (
+                    <TouchableOpacity
+                        key={category.id}
+                        onPress={() => handleCategoryPress(category.name)}
+                        style={styles.itemContainer}
+                    >
+                        <Image
+                            source={category.src}
+                            style={styles.itemImage}
+                        />
+                        <Text style={styles.itemName}>{category.name}</Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
+
+            <View style={{ width: '100%', borderTopWidth: 1, borderTopColor: '#dbdbdb', marginVertical: 20 }}>
+                <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20, marginHorizontal: 15 }}>
+                    <Text style={{ fontSize: 18,fontFamily: Font["poppins-bold"] }}>Öne Çıkarılan Ürünler ⏰</Text>
+                    {featuredProducts.length >= 4 && (
+                        <CustomButton title="Tümünü gör" onPress={() => navigation.navigate('Öne Çıkarılan Ürünler')} />
+
+                    )}
+                </View>
 
                 <View>
-                    <Carousel
-                        data={data}
-                        loop={true}
-                        autoplay={true}
-                        renderItem={ItemCard}
-                        sliderWidth={wp(100)}
-                        firstItem={1}
-                        itemWidth={wp(100) - 45}
-                        slideStyle={{ display: 'flex', alignItems: 'center', borderRadius: 20, }}
-                    />
-                </View>
+                    <FlatList
+                        data={featuredProducts}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                onPress={() => handleProductPress(item.id)}>
 
-                <View style={styles.itemList} >
-                    {categories.map((category) => (
-                        <TouchableOpacity
-                            key={category.id}
-                            onPress={() => handleCategoryPress(category.name)}
-                            style={styles.itemContainer}
-                        >
-                            <Image
-                                source={category.src}
-                                style={styles.itemImage}
-                            />
-                            <Text style={styles.itemName}>{category.name}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
+                                <View style={{ width: 110, marginRight: 13, }}>
+                                    <Image source={item.src} style={{ width: 110, height: 110, objectFit: 'cover', borderWidth: 1, borderColor: '#dbdbdb', borderRadius: 20 }} />
 
-                <View style={{ width: '100%', borderTopWidth: 1, borderTopColor: '#dbdbdb', marginVertical: 20 }}>
-                    <View style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20, marginHorizontal: 15 }}>
-                        <Text style={{ fontSize: 18 }}>Öne Çıkarılan Ürünler ⏰</Text>
-                        {featuredProducts.length >= 4 && (
-                            <CustomButton title="Tümünü gör" onPress={() => navigation.navigate('Öne Çıkarılan Ürünler')} />
-                            
-                        )}
-                    </View>
-
-                    <View>
-                        <FlatList
-                            data={featuredProducts}
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            keyExtractor={(item) => item.id.toString()}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity
-                                    onPress={() => handleProductPress(item.id)}>
-
-                                    <View style={{ width: 110, marginRight: 13, }}>
-                                        <Image source={item.src} style={{ width: 110, height: 110, objectFit: 'cover', borderWidth: 1, borderColor: '#dbdbdb', borderRadius: 20 }} />
-
-                                        <View style={styles.priceContainer}>
-                                            {item.discount && (
-                                                <View style={styles.discountContainer}>
-                                                    <Text style={styles.discountText}>{item.discount}</Text>
-                                                </View>
-                                            )}
-                                            <Text style={[styles.itemPrice, !item.discount && styles.discountedPrice]}>
-                                                {item.price}
-                                            </Text>
-
-                                        </View>
-                                        <Text style={styles.itemName} >{item.name}</Text>
+                                    <View style={styles.priceContainer}>
+                                        {item.discount && (
+                                            <View style={styles.discountContainer}>
+                                                <Text style={styles.discountText}>{item.discount}</Text>
+                                            </View>
+                                        )}
+                                        <Text style={[styles.itemPrice, !item.discount && styles.discountedPrice]}>
+                                            {item.price}
+                                        </Text>
 
                                     </View>
-                                </TouchableOpacity>
+                                    <Text style={styles.itemName} >{item.name}</Text>
 
-                            )}
-                            contentContainerStyle={{ paddingHorizontal: 15 }}
-                        />
-                    </View>
+                                </View>
+                            </TouchableOpacity>
+
+                        )}
+                        contentContainerStyle={{ paddingHorizontal: 15 }}
+                    />
                 </View>
+            </View>
 
 
 
 
-            </ScrollView>
+        </ScrollView>
 
         // </SafeAreaView>
     )
@@ -180,6 +181,7 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingLeft: '3%',
         paddingRight: '3%',
+
     },
     itemContainer: {
         flexDirection: 'column',
@@ -194,6 +196,8 @@ const styles = StyleSheet.create({
         width: '100%',
         marginLeft: 0,
         fontSize: 13,
+        fontFamily: Font["poppins-regular"],
+
     },
     itemImage: {
         width: '100%',
@@ -207,7 +211,6 @@ const styles = StyleSheet.create({
     priceContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 2,
     },
     itemPrice: {
         fontSize: 14,
@@ -220,6 +223,7 @@ const styles = StyleSheet.create({
         marginLeft: 0,
         width: '100%',
         textAlign: 'center',
+        padding: 5,
     },
     discountText: {
         color: 'grey',

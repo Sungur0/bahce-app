@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
 import React, { useLayoutEffect, useState, useEffect } from 'react';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useProductContext } from '../context/ProductContext';
@@ -13,7 +12,7 @@ import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated'
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart, decreaseQuantity } from '../redux/cartSlice';
 import Font from "../constants/Font";
-import { style } from 'deprecated-react-native-prop-types/DeprecatedViewPropTypes';
+
 
 
 const Tab = createMaterialTopTabNavigator();
