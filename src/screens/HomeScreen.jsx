@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useProductContext } from '../context/ProductContext';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Carousel, { ParallaxImage, Pagination } from 'react-native-snap-carousel';
-import Feather from 'react-native-vector-icons/Feather';
 import Font from "../constants/Font";
 
 const HomeScreen = () => {
