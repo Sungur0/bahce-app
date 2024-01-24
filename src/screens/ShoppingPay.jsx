@@ -7,13 +7,14 @@ import {
     TouchableOpacity,
     TextInput,
 } from 'react-native'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo,useEffect } from 'react'
 import RadioGroup from 'react-native-radio-buttons-group';
 import Font from "../constants/Font";
-import Animated, { Easing, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, useSharedValue, withSpring, withTiming, FadeInDown } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
-
+import Icon3 from 'react-native-vector-icons/Entypo'
+import LinearGradient from 'react-native-linear-gradient';
 import { CheckBox } from '@rneui/themed';
 import { selectTotalPrice, selectTotalDiscountAmount } from '../redux/cartSlice';
 import { useSelector } from 'react-redux';
@@ -25,6 +26,7 @@ export default function ShoppingPay() {
 
     const totalDiscountPrice = useSelector(state => selectTotalDiscountAmount(state, userId))
 
+    const earningPrice = totalDiscountPrice - totalPrice
 
     const [noteValue, setNoteValue] = useState('');
 
@@ -52,31 +54,33 @@ export default function ShoppingPay() {
         setSelectedCheck2(!selectedCheck2);
     };
 
+    useEffect(() => {
+        // Component ilk render olduğunda yapılacak işlemler
+        height.value = withTiming(0, { duration: 0 }); // Accordion 1
+        height2.value = withTiming(0, { duration: 0 }); // Accordion 2
+    }, []);
 
     const [isOpen, setIsOpen] = useState(false);
 
     const height = useSharedValue(0);
 
-    const toggleAccordion = () => {
-        height.value = withTiming(isOpen ? 0 : 100, { duration: 300, easing: Easing.ease });
 
+    const toggleAccordion = () => {
+        height.value = withTiming(isOpen ? 0 : 118, { duration: 250, easing: Easing.ease });
         setIsOpen(!isOpen);
     };
-
     const [isOpen2, setIsOpen2] = useState(false);
 
     const height2 = useSharedValue(0);
 
-    const toggleAccordion2 = () => {
-        height2.value = withTiming(isOpen2 ? 0 : 100, { duration: 300, easing: Easing.ease });
 
+    const toggleAccordion2 = () => {
+        height2.value = withTiming(isOpen2 ? 0 : 40, { duration: 300, easing: Easing.ease });
         setIsOpen2(!isOpen2);
     };
 
-
     return (
-        <ScrollView >
-
+        <ScrollView>
             <View style={styles.container}>
                 <View style={styles.noteAddInput} >
 
@@ -88,7 +92,6 @@ export default function ShoppingPay() {
                             style={styles.input}
                             placeholder="Sipariş notunu buraya yazınız."
                             onChangeText={handleNoteChange}
-                            multiline={true}
                             maxLength={70}
                             value={noteValue}
                         />
@@ -227,25 +230,104 @@ export default function ShoppingPay() {
 
                     </View>
                     <View style={styles.accordion}>
-                        <TouchableOpacity onPress={toggleAccordion}>
-                            <Text>Sipariş Toplamı</Text>
+                        <TouchableOpacity onPress={toggleAccordion} style={[styles.accordionView, { borderBottomWidth: isOpen ? 0 : 1, }]}>
+                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                                <Text style={styles.accordionText}>Sipariş Toplamı</Text>
+                                <View style={{ backgroundColor: 'rgba(128, 185, 5,0.2)', marginLeft: 10, borderRadius: 50 }}>
+                                    <Icon2
+                                        name={isOpen ? "keyboard-arrow-up" : "keyboard-arrow-down"}
+                                        color='#80B905'
+                                        size={20}
+                                    />
+                                </View>
+
+                            </View>
+
+
+                            {!isOpen ? <View>
+                                <Animated.Text style={styles.accordionPrice} entering={FadeInDown.duration(600).springify()}>₺{totalDiscountPrice.toFixed(2)}</Animated.Text>
+                            </View> : null}
+
+
                         </TouchableOpacity>
 
-                        <Animated.View style={{ height: height }}>
-                            <Text>Accordion İçeriği</Text>
+
+                        <Animated.View style={{ height: height, borderWidth: isOpen ? 1 : 0, borderRadius: 20, borderColor: 'rgba(128, 185, 5,0.3)', opacity: isOpen ? 1 : 0 }} >
+                            <View style={styles.accordionMenuViews}>
+                                <Text style={styles.text1}>Ürünler</Text>
+                                <Text style={styles.text1}>₺{totalDiscountPrice.toFixed(2)}</Text>
+                            </View>
+
+                            <View style={styles.accordionMenuViews}>
+                                <Text style={styles.text1}>Kargo Ücreti</Text>
+                                <Text style={styles.text1}>-₺<Text style={{ textDecorationLine: 'line-through', textDecorationStyle: 'solid', }}> 24,99</Text> Ücretsiz</Text>
+                            </View>
+
+                            <TouchableOpacity>
+                                <View style={[styles.accordionMenuViews, { backgroundColor: 'rgba(128, 185, 5,0.2)', paddingHorizontal: 10 }]}>
+                                    <Text style={styles.text1}>Ücret Detayları</Text>
+                                    <Icon2
+                                        name={"keyboard-arrow-right"}
+                                        color='#80B905'
+                                        size={20}
+                                    />
+                                </View>
+                            </TouchableOpacity>
+
+                            <View style={styles.accordionMenuViews}>
+                                <Text style={{ fontFamily: Font["poppins-regular"], fontSize: 13 }}>Alt Toplam</Text>
+                                <Text style={[styles.text1, { color: '#000' }]}>₺{totalDiscountPrice.toFixed(2)}</Text>
+                            </View>
                         </Animated.View>
 
+
+
                     </View>
+
+
                     <View style={styles.accordion}>
-                        <TouchableOpacity onPress={toggleAccordion2}>
-                            <Text>Sipariş</Text>
+                        <TouchableOpacity onPress={toggleAccordion2} style={[styles.accordionView2, { borderBottomWidth: isOpen2 ? 0 : 1, }]}>
+                            <View style={{ flex: 1, flexDirection: 'row' }}>
+
+                                <Text style={styles.accordionText}>Kazancın</Text>
+                                <View style={{ backgroundColor: 'rgba(128, 185, 5,0.2)', marginLeft: 10, borderRadius: 50 }}>
+                                    <Icon2
+                                        name={isOpen2 ? "keyboard-arrow-up" : "keyboard-arrow-down"}
+                                        color='#80B905'
+                                        size={20}
+                                    />
+                                </View>
+                            </View>
+
+                            <View>
+                                {!isOpen2 ? <View>
+                                    <Animated.Text entering={FadeInDown.duration(600).springify()} style={[styles.accordionPrice, { color: '#80B905' }]}>- ₺{earningPrice.toFixed(2)}</Animated.Text>
+                                </View> : null}
+                            </View>
                         </TouchableOpacity>
 
-                        <Animated.View style={{ height: height2 }}>
-                            <Text>Accordion İçeriği</Text>
-                        </Animated.View>
+                        <Animated.View style={{ height: height2, borderWidth: isOpen2 ? 1 : 0, borderRadius: 20, borderColor: 'rgba(128, 185, 5,0.3)', opacity: isOpen2 ? 1 : 0, justifyContent: 'center' }}>
+                            <View style={styles.accordionMenuViews}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Icon3
+                                        name="check"
+                                        type="material"
+                                        size={20}
+                                        color='#80B905'
+                                    />
+                                    <Text style={styles.text1}>Kazançlı Ürünler</Text>
 
+                                </View>
+
+
+                                <Text style={[styles.accordionPrice, { color: '#80B905' }]}>- ₺{earningPrice.toFixed(2)}</Text>
+
+                            </View>
+
+                        </Animated.View>
                     </View>
+
+
 
                 </View>
 
@@ -304,7 +386,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '92%',
         borderTopWidth: 1,
-        borderColor: '#80B905',
+        borderColor: 'rgba(128, 185, 5,0.3)',
     },
     checkTextContainer: {
         height: '95%',
@@ -361,6 +443,47 @@ const styles = StyleSheet.create({
     },
     accordion: {
         paddingTop: 10,
+        paddingHorizontal: 10
+    },
+    accordionView: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderColor: 'rgba(128, 185, 5,0.3)',
+
+    },
+    accordionView2: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        paddingBottom: 10,
+        borderColor: 'rgba(128, 185, 5,0.3)',
+
+    },
+    accordionText: {
+        fontSize: 13,
+        fontFamily: Font["poppins-regular"],
+
+    },
+    accordionPrice: {
+        fontFamily: Font["poppins-regular"],
+
+    },
+    text1: {
+        fontSize: 13,
+        color: 'grey',
+        fontFamily: Font["poppins-regular"],
+
+    },
+    accordionMenuViews: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        margin: 0,
+        paddingVertical: 5,
         paddingHorizontal: 10
     }
 
