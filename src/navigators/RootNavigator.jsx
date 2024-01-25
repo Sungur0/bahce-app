@@ -10,6 +10,7 @@ import CategoryNavigator from './CategoryNavigator';
 import FeaturedProductsScreen from '../screens/FeaturedProducts';
 import SignUpScreen from '../screens/SignupScreen';
 import ShoppingPay from '../screens/ShoppingPay';
+import OrderSucces from '../screens/OrderSucces';
 import { useSelector } from 'react-redux';
 
 const Stack = createNativeStackNavigator();
@@ -58,11 +59,11 @@ export default function RootNavigator() {
                     headerTitle: 'Ürünler',
                     headerBackTitleVisible: false,
                     animation: 'slide_from_right',
-                    headerStyle:{
-                    backgroundColor: '#80B905',
+                    headerStyle: {
+                        backgroundColor: '#80B905',
                     },
-                    headerTintColor: '#fff', 
-             
+                    headerTintColor: '#fff',
+
 
                 }}
             />
@@ -78,15 +79,17 @@ export default function RootNavigator() {
                 name="Ödeme Yap"
                 component={ShoppingPay}
                 options={{
-                    headerStyle:{
-                    backgroundColor: '#80B905',
+                    headerStyle: {
+                        backgroundColor: '#80B905',
                     },
-                    headerTintColor: '#fff', 
+                    headerTintColor: '#fff',
                     animation: 'slide_from_right',
 
                 }}
 
             />
+            <Stack.Screen name="Sipariş Tamamlama" component={OrderSucces} options={{ headerShown: false, animation: 'slide_from_bottom', }} />
+
 
         </Stack.Navigator>
     );

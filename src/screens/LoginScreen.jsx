@@ -32,13 +32,15 @@ const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const storedUserData = useSelector((state) => state.user.user);
-
+  
   const handleLogin = () => {
     // Kullanıcı giriş yapmışsa, home ekranına yönlendirme
     if (isLoggedIn) {
       navigation.replace('Tab');
     } else {
       // Redux store'dan alınan üye bilgileri ile giriş kontrolü
+      // const storedUserData = getState().user.user; // Redux store'dan kullanıcı bilgilerini al
+
       if (email === storedUserData.email && password === storedUserData.password) {
         // Giriş başarılı ise kullanıcı bilgilerini döndür
         const userData = {
@@ -51,7 +53,7 @@ const LoginScreen = ({ navigation }) => {
         dispatch(login(userData));
 
         // Giriş yapıldıktan sonra home ekranına yönlendirme
-        navigation.replace('Tab');
+        // navigation.replace('Tab');
       } else {
         // Giriş başarısız ise hata bilgisi döndür
         Alert.alert('Hata', 'Giriş başarısız. Lütfen e-posta ve şifrenizi kontrol edin.');
