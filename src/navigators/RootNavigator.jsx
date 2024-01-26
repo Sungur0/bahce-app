@@ -11,6 +11,7 @@ import FeaturedProductsScreen from '../screens/FeaturedProducts';
 import SignUpScreen from '../screens/SignupScreen';
 import ShoppingPay from '../screens/ShoppingPay';
 import OrderSucces from '../screens/OrderSucces';
+import Orders from '../screens/Orders'
 import { useSelector } from 'react-redux';
 
 const Stack = createNativeStackNavigator();
@@ -89,6 +90,7 @@ export default function RootNavigator() {
 
             />
             <Stack.Screen name="Sipariş Tamamlama" component={OrderSucces} options={{ headerShown: false, animation: 'slide_from_bottom', }} />
+            <Stack.Screen name="Siparişlerim" component={Orders} options={{ headerShown: true, animation: 'slide_from_right', }} />
 
 
         </Stack.Navigator>

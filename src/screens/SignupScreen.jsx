@@ -31,10 +31,7 @@ const SignUpScreen = ({ navigation }) => {
       console.log('Invalid email');
       return;  
     }
-    // Eğer gerçek bir üyelik işlemi yapılıyorsa, bu kısmı uygun şekilde güncelleyin.
-    // Örneğin, bir API çağrısı kullanabilirsiniz.
     const randomUserId = Math.floor(Math.random() * 1000) + 1;
-    // Üyelik işlemi tamamlandıktan sonra isteğe bağlı olarak giriş yapabilirsiniz.
     // Ayrıca, giriş işlemi burada yapılıyor gibi düşünülebilir.
     const userData = {
       userId: randomUserId,

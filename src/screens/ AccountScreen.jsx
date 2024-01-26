@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 const AccountScreen = ({ navigation }) => {
   const userData = useSelector((state) => state.user.user);
-
+    
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Account Screen</Text>

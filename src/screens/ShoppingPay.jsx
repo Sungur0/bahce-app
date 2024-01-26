@@ -6,6 +6,7 @@ import {
     Modal,
     TouchableOpacity,
     TextInput,
+    Alert,
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Font from "../constants/Font";
@@ -14,22 +15,32 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import Icon3 from 'react-native-vector-icons/Entypo'
 import { LinearGradient } from 'expo-linear-gradient';
-
 import { CheckBox } from '@rneui/themed';
-import { selectTotalPrice, selectTotalDiscountAmount } from '../redux/cartSlice';
-import { useSelector } from 'react-redux';
+import { selectTotalPrice, selectTotalDiscountAmount, clearCart } from '../redux/cartSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { addOrder } from '../redux/orderSlice';
 
 export default function ShoppingPay({ navigation }) {
+    const dispatch = useDispatch()
+
     const userId = useSelector((state) => state.user.user.userId);
+
+    const cartItems = useSelector((state) => {
+        const userCart = state.cart[userId];
+        return userCart ? userCart : [];
+    });
 
     const totalPrice = useSelector(state => selectTotalPrice(state, userId));
 
     const totalDiscountPrice = useSelector(state => selectTotalDiscountAmount(state, userId))
 
-    const earningPrice = totalDiscountPrice - totalPrice
+
+    const discountedPrice = (totalDiscountPrice > 0) ? totalDiscountPrice : 0;
+    const earningPrice = (discountedPrice > 0) ? (discountedPrice - totalPrice) : 0;
 
     const [noteValue, setNoteValue] = useState('');
 
+    console.log(totalPrice)
 
     const handleNoteChange = (text) => {
         setNoteValue(text);
@@ -95,14 +106,26 @@ export default function ShoppingPay({ navigation }) {
 
 
     const handleSiparisVer = () => {
-        // Siparişi ver işlemleri burada yapılır
-        // Önce checkbox'ın seçili olup olmadığını kontrol et
         if (selectedCheck3) {
+            // Siparişi oluştur
+            const order = {
+                userId,
+                products: cartItems,
+                note:noteValue,
+            };
+
+            // Siparişi ekleyin
+            dispatch(addOrder(order));
+
+            // Sepeti temizleme işlemleri
+            dispatch(clearCart(userId));
+
+            // Sipariş tamamlandıktan sonra yönlendirme yapabilirsiniz
             navigation.navigate('Sipariş Tamamlama');
             console.log("Sipariş verildi!");
         } else {
             // Checkbox seçili değilse, kullanıcıyı uyar veya başka bir işlem yap
-            console.log("Önce sözleşmeyi kabul etmelisiniz.");
+            Alert.alert("Önce sözleşmeyi kabul etmelisiniz.");
         }
     };
 
@@ -273,7 +296,9 @@ export default function ShoppingPay({ navigation }) {
 
 
                                 {!isOpen ? <View>
-                                    <Animated.Text style={styles.accordionPrice} entering={FadeInDown.duration(600).springify()}>₺{totalDiscountPrice.toFixed(2)}</Animated.Text>
+                                    <Animated.Text style={styles.accordionPrice} entering={FadeInDown.duration(600).springify()}>₺
+                                        {Math.max(totalDiscountPrice, totalPrice).toFixed(2)}
+                                    </Animated.Text>
                                 </View> : null}
 
 
@@ -283,7 +308,7 @@ export default function ShoppingPay({ navigation }) {
                             <Animated.View style={[animatedStyle, { height: height, borderWidth: isOpen ? 1 : 0, borderRadius: 20, borderColor: 'rgba(128, 185, 5,0.3)', opacity: isOpen ? 1 : 0 }]} >
                                 <View style={styles.accordionMenuViews}>
                                     <Text style={styles.text1}>Ürünler</Text>
-                                    <Text style={styles.text1}>₺{totalDiscountPrice.toFixed(2)}</Text>
+                                    <Text style={styles.text1}>₺ {Math.max(totalDiscountPrice, totalPrice).toFixed(2)}</Text>
                                 </View>
 
                                 <View style={styles.accordionMenuViews}>
@@ -304,7 +329,7 @@ export default function ShoppingPay({ navigation }) {
 
                                 <View style={styles.accordionMenuViews}>
                                     <Text style={{ fontFamily: Font["poppins-regular"], fontSize: 13 }}>Alt Toplam</Text>
-                                    <Text style={[styles.text1, { color: '#000' }]}>₺{totalDiscountPrice.toFixed(2)}</Text>
+                                    <Text style={[styles.text1, { color: '#000' }]}>₺ {Math.max(totalDiscountPrice, totalPrice).toFixed(2)}</Text>
                                 </View>
                             </Animated.View>
 

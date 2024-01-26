@@ -8,6 +8,11 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const { userId, product } = action.payload;
+
+      if (!userId) {
+        return state;
+      }
+
       state[userId] = state[userId] ? [...state[userId]] : [];
       const existingProduct = state[userId].find(p => p.id === product.id);
       if (existingProduct) {
@@ -50,14 +55,15 @@ export const selectTotalPrice = (state, userId) => {
 
 export const selectTotalDiscountedPrice = (state, userId) => {
   return state.cart[userId]?.reduce((total, product) => {
-    return total + product.quantity * (product.price - (product.discount || 0));
+    const discountedPrice = product.discount ? (product.price - product.discount) : product.price;
+    return total + product.quantity * discountedPrice;
   }, 0) || 0;
 };
 
 export const selectTotalDiscountAmount = (state, userId) => {
   return state.cart[userId]?.reduce((total, product) => {
-    return total + product.quantity * (product.discount || 0);
+    const discountedAmount = product.discount ? (product.discount * product.quantity) : 0;
+    return total + discountedAmount;
   }, 0) || 0;
 };
-
 export default cartSlice.reducer;

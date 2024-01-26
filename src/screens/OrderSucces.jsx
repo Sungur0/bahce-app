@@ -13,9 +13,9 @@ export default function OrderSucces({ navigation }) {
             setShowLottie(true);
         }, delay);
 
-        // const timerToNavigate = setTimeout(() => {
-        //     navigation.navigate('Home');
-        // }, delay + 5000); // animasyon gösterildikten 5 saniye sonra ekrana dönsün
+        const timerToNavigate = setTimeout(() => {
+            navigation.navigate('Home');
+        }, delay + 10000); // animasyon gösterildikten 5 saniye sonra ekrana dönsün
 
         return () => {
             clearTimeout(timerToShowLottie);
@@ -42,7 +42,7 @@ export default function OrderSucces({ navigation }) {
                         <Text style={styles.text2}>Ana sayfaya dön</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity  >
+                    <TouchableOpacity onPress={() => navigation.navigate('Siparişlerim')} >
                         <Text style={styles.text2}>Siparişe git</Text>
                     </TouchableOpacity>
 

@@ -10,13 +10,14 @@ const userSlice = createSlice({
       userId: null,
       username: '',
       email: '',
+      password:''
     },
   },
   reducers: {
     login: (state, action) => {
-      const { userId, username, email } = action.payload;
+      const { userId, username, email ,password} = action.payload;
       state.isLoggedIn = true;
-      state.user = { userId, username, email };
+      state.user = { userId, username, email,password };
     },
     logout: (state) => {  
       state.isLoggedIn = false;
@@ -24,6 +25,7 @@ const userSlice = createSlice({
         userId: null,
         username: '',
         email: '',
+        password:'',
       };
     },
     initializeUser: (state, action) => {

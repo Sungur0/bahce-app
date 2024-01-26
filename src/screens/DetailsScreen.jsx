@@ -93,7 +93,9 @@ const DetailScreen = () => {
     dispatch(addToCart({ userId, product }));
   };
   const userId = useSelector((state) => state.user.user.userId);
+
   const cart = useSelector((state) => state.cart[userId] || []);
+  
   const quantityInCart = cart.find(cartProduct => cartProduct.id === product.id)?.quantity || 0;
 
   const handleIncreaseQuantity = () => {

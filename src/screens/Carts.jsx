@@ -11,12 +11,15 @@ import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated'
 
 
 export default function Carts({ navigation }) {
+  
   const userId = useSelector((state) => state.user.user.userId);
+  
   const cartItems = useSelector((state) => state.cart[userId] || []);
 
   const totalPrice = useSelector(state => selectTotalPrice(state, userId));
 
   const totalDiscountPrice = useSelector(state => selectTotalDiscountAmount(state, userId))
+  console.log(totalPrice)
 
   const formattedTotalPrice = totalPrice.toFixed(2);
   
