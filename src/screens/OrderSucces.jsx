@@ -13,9 +13,9 @@ export default function OrderSucces({ navigation }) {
             setShowLottie(true);
         }, delay);
 
-        const timerToNavigate = setTimeout(() => {
-            navigation.navigate('Home');
-        }, delay + 10000); // animasyon gösterildikten 5 saniye sonra ekrana dönsün
+        // const timerToNavigate = setTimeout(() => {
+        //     navigation.navigate('Home');
+        // }, delay + 10000); // animasyon gösterildikten 5 saniye sonra ekrana dönsün
 
         return () => {
             clearTimeout(timerToShowLottie);

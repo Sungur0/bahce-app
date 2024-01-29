@@ -45,7 +45,7 @@ export default function ShoppingPay({ navigation }) {
     const handleNoteChange = (text) => {
         setNoteValue(text);
     };
-
+    const total = totalPrice.toFixed(2)
 
     const [selectedOption, setSelectedOption] = useState('option1');
 
@@ -103,6 +103,8 @@ export default function ShoppingPay({ navigation }) {
         };
     });
 
+    const trOptions = { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Istanbul' };
+    const date = new Intl.DateTimeFormat('tr-TR', trOptions);
 
 
     const handleSiparisVer = () => {
@@ -111,20 +113,18 @@ export default function ShoppingPay({ navigation }) {
             const order = {
                 userId,
                 products: cartItems,
-                note:noteValue,
+                note: noteValue,
+                date: date,
+                total: total
             };
 
-            // Siparişi ekleyin
             dispatch(addOrder(order));
 
-            // Sepeti temizleme işlemleri
             dispatch(clearCart(userId));
 
-            // Sipariş tamamlandıktan sonra yönlendirme yapabilirsiniz
-            navigation.navigate('Sipariş Tamamlama');
+            navigation.replace('Sipariş Tamamlama');
             console.log("Sipariş verildi!");
         } else {
-            // Checkbox seçili değilse, kullanıcıyı uyar veya başka bir işlem yap
             Alert.alert("Önce sözleşmeyi kabul etmelisiniz.");
         }
     };

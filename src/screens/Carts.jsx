@@ -47,11 +47,11 @@ export default function Carts({ navigation }) {
               key={index}
               onPress={() => handleProductPress(item.id)}>
 
-              <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'center', margin: 6 }}>
+              <View style={{ flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'center', marginVertical: 6 }}>
 
                 <View style={{ width: '96%', backgroundColor: '#fff', borderRadius: 6, flexDirection: 'row', alignItems: 'center', position: 'relative', padding: 10, }}>
                   {/* flex eklenebilir */}
-
+                  
                   <View style={styles.cartItemsImage}>
                     <Image source={item.src}
                       style={styles.itemImage} />

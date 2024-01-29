@@ -21,7 +21,7 @@ export const ProductProvider = ({ children }) => {
     { id: 8, category: 'fertilizers', name: 'Zammia Benjamina Pembe', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', price: 89.10, src: require('../../assets/image1.jpg') },
     { id: 9, category: 'flowers', name: 'Ficus Benjamina Natasja ', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', price: 72.69, discount: 90.10, src: require('../../assets/image3.jpg') },
     { id: 10, category: 'fertilizers', name: 'Zammia Benjamina Pembe', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', price: 89.10, src: require('../../assets/image1.jpg') },
-    { id: 11, category: 'pots', name: 'Pembe İkili Dekoratif Saksı', models: [require('../../assets/image1.jpg'), require('../../assets/image1.jpg')], description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', price: 39.35, discount: 42.35, src: require('../../assets/image2.jpg') },
+    { id: 11, category: 'pots', name: 'Pembe İkili Dekoratif Saksı', models: [require('../../assets/image2.jpg'), require('../../assets/image2.jpg')], description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', price: 39.35, discount: 42.35, src: require('../../assets/image2.jpg') },
 
   ]);
 

@@ -3,8 +3,6 @@ import { createNativeStackNavigator, TransitionPresets } from '@react-navigation
 import DetailsScreen from '../screens/DetailsScreen';
 import LoginScreen from '../screens/LoginScreen';
 import Carts from '../screens/Carts';
-import '../screens/Products'
-import { View, Image } from 'react-native';
 import TopNavigator from './TopNavigator';
 import CategoryNavigator from './CategoryNavigator';
 import FeaturedProductsScreen from '../screens/FeaturedProducts';
