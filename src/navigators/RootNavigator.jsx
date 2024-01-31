@@ -1,5 +1,8 @@
 import React from 'react';
 import { createNativeStackNavigator, TransitionPresets } from '@react-navigation/native-stack';
+import { View, Text,} from 'react-native'
+import { Button } from 'react-native-elements';
+import Icon2 from 'react-native-vector-icons/FontAwesome';
 import DetailsScreen from '../screens/DetailsScreen';
 import LoginScreen from '../screens/LoginScreen';
 import Carts from '../screens/Carts';
@@ -16,6 +19,11 @@ const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
+    const userId = useSelector((state) => state.user.user.userId);
+
+    const cart = useSelector((state) => state.cart[userId] || []);
+
 
     return (
 
@@ -62,8 +70,24 @@ export default function RootNavigator() {
                         backgroundColor: '#80B905',
                     },
                     headerTintColor: '#fff',
+                    headerRight: () => {
+                        return (
+                            <View>
+                                <View style={{ borderRadius: 50, backgroundColor: 'rgba(253, 132, 7, 1)', width: 16, height: 16, position: 'absolute', alignItems: 'center', right: '0%', zIndex: 1 }}>
+                                    <Text style={{ color: '#fff', fontSize: 12 }}>{cart.length}</Text>
+                                </View>
+                                <Button
+                                    onPress={() => navigation.navigate('Sepetim')}
+                                    type='clear'
+                                    icon={<Icon2 name="shopping-basket" size={18} color="white" />}
+                                    style={{ marginLeft: 0 }}
+                                />
+
+                            </View>
 
 
+                        )
+                    }
                 }}
             />
             <Stack.Screen

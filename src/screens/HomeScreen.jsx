@@ -14,17 +14,6 @@ const HomeScreen = () => {
 
 
 
-    // useLayoutEffect(() => {
-    //     navigation.setOptions({
-    //         headerRight: () => {
-    //             return (
-    //                 <Button
-    //                     title='Sepet'
-    //                     onPress={() => navigation.navigate('Sepetim')} />
-    //             )
-    //         }
-    //     })
-    // }, [navigation])
 
     const data = [
         { id: '1', src: require('../../assets/bahce11.jpg'), },

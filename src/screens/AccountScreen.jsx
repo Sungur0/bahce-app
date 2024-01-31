@@ -19,15 +19,12 @@ const AccountScreen = ({ navigation }) => {
       <Text style={styles.text}>Account Screen</Text>
       <Text style={styles.text}>Kullanıcı Adı: {userData.username}</Text>
       <Text style={styles.text}>E-posta: {userData.email}</Text>
-      {/* Diğer kullanıcı bilgilerini ekleyebilirsiniz */}
-      {/* <Button
+      <Button
         title="Logout"
         onPress={() => {
-          // Örneğin: dispatch(logout());
-          // Bu örnekte dispatch fonksiyonunu kullanmıyorsunuz, ama gerçek uygulamada kullanmanız önerilir.
-          navigation.replace('Login'); // Login ekranına yönlendirme
+          navigation.replace('Login'); 
         }}
-      /> */}
+      />
     </View>
   );
 };

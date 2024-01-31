@@ -12,12 +12,43 @@ import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated'
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart, decreaseQuantity } from '../redux/cartSlice';
 import Font from "../constants/Font";
+import Icon2 from 'react-native-vector-icons/FontAwesome';
 
 
 
 const Tab = createMaterialTopTabNavigator();
 
 const DetailScreen = () => {
+
+  const userId = useSelector((state) => state.user.user.userId);
+
+  const cart = useSelector((state) => state.cart[userId] || []);
+ 
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          <View>
+            <View style={{ borderRadius: 50, backgroundColor: 'rgba(253, 132, 7, 1)', width: 16, height: 16, position: 'absolute', alignItems: 'center', right: '0%',zIndex:1 }}>
+              <Text style={{ color: '#fff',fontSize:12 }}>{cart.length}</Text>
+            </View>
+            <Button
+              onPress={() => navigation.navigate('Sepetim')}
+              type='clear'
+              icon={<Icon2 name="shopping-basket" size={18} color="white" />}
+              style={{ marginLeft: 0 }}
+            />
+
+          </View>
+
+
+        )
+      }
+    })
+  }, [navigation,cart])
+
+
   const { products } = useProductContext();
   const route = useRoute();
   const [lightboxVisible, setLightboxVisible] = useState(false);
@@ -92,10 +123,8 @@ const DetailScreen = () => {
   const handleAddToCart = () => {
     dispatch(addToCart({ userId, product }));
   };
-  const userId = useSelector((state) => state.user.user.userId);
 
-  const cart = useSelector((state) => state.cart[userId] || []);
-  
+
   const quantityInCart = cart.find(cartProduct => cartProduct.id === product.id)?.quantity || 0;
 
   const handleIncreaseQuantity = () => {

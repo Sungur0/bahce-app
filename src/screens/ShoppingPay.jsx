@@ -103,8 +103,6 @@ export default function ShoppingPay({ navigation }) {
         };
     });
 
-    const trOptions = { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Istanbul' };
-    const date = new Intl.DateTimeFormat('tr-TR', trOptions);
 
 
     const handleSiparisVer = () => {
@@ -114,7 +112,7 @@ export default function ShoppingPay({ navigation }) {
                 userId,
                 products: cartItems,
                 note: noteValue,
-                date: date,
+                date: Date.now(),
                 total: total
             };
 

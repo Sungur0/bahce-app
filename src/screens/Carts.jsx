@@ -7,6 +7,7 @@ import Font from "../constants/Font";
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, decreaseQuantity } from '../redux/cartSlice';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 

@@ -2,7 +2,7 @@ import { View, Text, Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import Carts from '../screens/Carts';
-import Account from '../screens/ AccountScreen';
+import Account from '../screens/AccountScreen';
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
