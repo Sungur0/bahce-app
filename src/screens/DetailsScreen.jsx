@@ -8,46 +8,30 @@ import { Button } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import Modal from 'react-native-modal';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeInDown, FadeInUp, BounceIn, BounceOut } from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart, decreaseQuantity } from '../redux/cartSlice';
 import Font from "../constants/Font";
 import Icon2 from 'react-native-vector-icons/FontAwesome';
+import Icon3 from 'react-native-vector-icons/MaterialIcons';
+
+import { addToFavorites, removeFromFavorites } from '../redux/favoriteSlice';
+import { createSelector } from 'reselect';
 
 
 
 const Tab = createMaterialTopTabNavigator();
 
+const selectCart = (state) => state.cart;
+const selectUserId = (state) => state.user.user.userId;
+
+const makeSelectCart = createSelector(
+  [selectCart, selectUserId],
+  (cart, userId) => cart[userId] || []
+);
+
 const DetailScreen = () => {
-
-  const userId = useSelector((state) => state.user.user.userId);
-
-  const cart = useSelector((state) => state.cart[userId] || []);
- 
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => {
-        return (
-          <View>
-            <View style={{ borderRadius: 50, backgroundColor: 'rgba(253, 132, 7, 1)', width: 16, height: 16, position: 'absolute', alignItems: 'center', right: '0%',zIndex:1 }}>
-              <Text style={{ color: '#fff',fontSize:12 }}>{cart.length}</Text>
-            </View>
-            <Button
-              onPress={() => navigation.navigate('Sepetim')}
-              type='clear'
-              icon={<Icon2 name="shopping-basket" size={18} color="white" />}
-              style={{ marginLeft: 0 }}
-            />
-
-          </View>
-
-
-        )
-      }
-    })
-  }, [navigation,cart])
-
+  const dispatch = useDispatch();
 
   const { products } = useProductContext();
   const route = useRoute();
@@ -55,6 +39,49 @@ const DetailScreen = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const { productId } = route.params;
   const navigation = useNavigation();
+
+  const userId = useSelector(selectUserId);
+  const cart = useSelector(makeSelectCart);
+
+
+
+  const toggleFavorite = () => {
+    if (isFavorite) {
+      dispatch(removeFromFavorites([product]));
+    } else {
+      dispatch(addToFavorites([product]));
+    }
+  };
+  const favoriteProducts = useSelector(state => state.favorite.products);
+  const isFavorite = favoriteProducts.some(favProduct => favProduct.id === products.id);
+
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        cart.length > 0 ? (
+          <Animated.View
+            entering={BounceIn.duration(500).springify()}
+            exiting={FadeInUp.duration(500).springify()}
+          >
+            <View style={{ borderRadius: 50, backgroundColor: 'rgba(253, 132, 7, 1)', width: 16, height: 16, position: 'absolute', alignItems: 'center', right: '0%', zIndex: 1 }}>
+              <Animated.Text
+                entering={BounceIn.duration(1000).springify()} style={{ color: '#fff', fontSize: 12 }}>{cart.length}</Animated.Text>
+            </View>
+            <Button
+              onPress={() => navigation.navigate('Sepetim')}
+              type='clear'
+              icon={<Icon2 name="shopping-basket" size={18} color="white" />}
+              style={{ marginLeft: 0 }}
+            />
+          </Animated.View>
+        ) : null
+      )
+    });
+  }, [navigation, cart]);
+
+
+
 
   const openLightbox = (image) => {
     setSelectedImage(image);
@@ -70,6 +97,7 @@ const DetailScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
+
         <Button
           onPress={handleGoBack}
           color='black'
@@ -118,7 +146,6 @@ const DetailScreen = () => {
 
 
 
-  const dispatch = useDispatch();
 
   const handleAddToCart = () => {
     dispatch(addToCart({ userId, product }));
@@ -143,12 +170,30 @@ const DetailScreen = () => {
 
 
 
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}
         contentContainerStyle={{ flexGrow: 1 }} >
         <View style={styles.container}>
+
+          <TouchableOpacity onPress={toggleFavorite} style={styles.favorite} >
+            <View style={{
+              borderRadius: 50,
+              backgroundColor: 'rgba(239, 236, 236, 0.9)',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 10
+            }} >
+              <Text> {isFavorite ? <Icon3 name="favorite" size={25} color="rgba(253, 132, 7, 1)" />
+                :
+                <Icon3 name="favorite-border" size={25} color="rgba(253, 132, 7, 1)" />}
+              </Text>
+
+            </View>
+          </TouchableOpacity>
+
           <View>
             {product.models && product.models.length > 0 ? (
               <Swiper
@@ -196,12 +241,17 @@ const DetailScreen = () => {
 
 
           <View style={styles.productDetail}>
-            <Text style={styles.price}>{product.price}</Text>
+            <View style={{ flexDirection: 'row', }}>
+              <Text style={[styles.price, { marginHorizontal: 10, color: 'grey', textDecorationLine: 'line-through', fontFamily: Font["poppins-regular"], }]}>{product.discount}</Text>
+
+              <Text style={styles.price}>{product.price}</Text>
+
+            </View>
             <Text style={styles.name}>{product.name}</Text>
             <Text style={styles.description}>{product.description}</Text>
           </View>
 
-          <Tab.Navigator style={{ flex: 1, height: wp(100) }}
+          <Tab.Navigator
             scrollEnabled={true}
             screenOptions={{
               tabBarScrollEnabled: true,
@@ -259,9 +309,8 @@ const DetailScreen = () => {
         )}
 
       </View>
-
-
     </SafeAreaView>
+
   );
 };
 
@@ -316,7 +365,6 @@ const styles = StyleSheet.create({
     color: 'green',
   },
   productDetail: {
-    flex: 1,
     alignItems: 'center',
     padding: 16,
 
@@ -384,6 +432,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
 
   },
+  favorite: {
+    position: 'absolute',
+    right: 20,
+    top: 5,
+    zIndex: 1
+  }
 });
 
 export default DetailScreen;

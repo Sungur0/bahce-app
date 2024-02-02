@@ -19,10 +19,9 @@ const TopNavigator = () => {
         headerShown: true,
         headerTitleAlign: 'center',
         tabBarActiveTintColor: '#80B905',
-        tabBarInactiveTintColor:'gray'
+        tabBarInactiveTintColor: 'gray'
       }}
-
-      >
+    >
 
       <Tab.Screen
         name="Home"
@@ -39,7 +38,6 @@ const TopNavigator = () => {
             />
           ),
         }}
-
       />
 
 
@@ -61,7 +59,7 @@ const TopNavigator = () => {
           )
         }}
       />
-   
+
     </Tab.Navigator>
   )
 }

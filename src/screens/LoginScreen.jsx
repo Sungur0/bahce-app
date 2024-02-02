@@ -1,15 +1,8 @@
 // LoginScreen.js
 
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  ImageBackground,
-  StyleSheet,
-  Alert,
-  TouchableOpacity
-} from 'react-native';
-
+import React, { useState, } from 'react';
+import { View, Text, ImageBackground, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { createSelector } from 'reselect';
 import { Ionicons } from "@expo/vector-icons";
 import AppTextInput from "../components/appTextInput";
 import Font from "../constants/Font";
@@ -17,14 +10,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../redux/userSlice';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 
+
+
 const backgroundImage = require('../../assets/background.png');
-
-
 
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -33,41 +25,14 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     if (userData && email === userData.email && password === userData.password) {
-      // Giriş başarılı ise kullanıcı bilgilerini Redux store'a ekleyelim
       dispatch(login(userData));
 
-      // Giriş yapıldıktan sonra home ekranına yönlendirme
       navigation.replace('Tab');
     } else {
-      // Giriş başarısız ise hata bilgisi döndür
       Alert.alert('Hata', 'Giriş başarısız. Lütfen e-posta ve şifrenizi kontrol edin.');
     }
   };
-  // const handleLogin = () => {
-  //   // Kullanıcı giriş yapmışsa, home ekranına yönlendirme
-  //   if (isLoggedIn) {
-  //     // navigation.replace('Tab');
-  //   } else {
-  //     if (email === userData.email && password === userData.password) {
-  //       // Giriş başarılı ise kullanıcı bilgilerini döndür
-  //       const userData = {
-  //         userId: storedUserData.userId,
-  //         username: storedUserData.username,
-  //         email: storedUserData.email,
-  //         password: storedUserData.password,
 
-  //       };
-
-  //       // Redux store'a kullanıcıyı ekleyelim
-  //       dispatch(login(userData));
-
-  //       navigation.replace('Tab');
-  //     } else {
-  //       // Giriş başarısız ise hata bilgisi döndür
-  //       Alert.alert('Hata', 'Giriş başarısız. Lütfen e-posta ve şifrenizi kontrol edin.');
-  //     }
-  //   }
-  // };
 
   const handleSignUpNavigation = () => {
     navigation.navigate('Signup');

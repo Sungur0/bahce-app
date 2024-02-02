@@ -3,11 +3,9 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/userSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import AppTextInput from "../components/appTextInput";
 import Font from "../constants/Font";
-import Icon from 'react-native-vector-icons/AntDesign';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Ionicons } from "@expo/vector-icons";
 
@@ -18,9 +16,8 @@ const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
-
+  const [tel, setTel] = useState('');
   const isEmailValid = () => {
-    // Basit bir e-posta doğrulama için düzenli ifade
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
@@ -29,19 +26,17 @@ const SignUpScreen = ({ navigation }) => {
 
     if (!isEmailValid()) {
       console.log('Invalid email');
-      return;  
+      return;
     }
     const randomUserId = Math.floor(Math.random() * 1000) + 1;
-    // Ayrıca, giriş işlemi burada yapılıyor gibi düşünülebilir.
     const userData = {
       userId: randomUserId,
-      username: userName, // Gerçek bir kullanıcı adı ekleyin
+      username: userName,
       email: email,
       password: password,
+      tel: tel,
     };
 
-
-    // Redux store'a kullanıcıyı ekleyelim
     dispatch(login(userData));
 
     console.log(userData)
@@ -51,7 +46,6 @@ const SignUpScreen = ({ navigation }) => {
   };
 
   const handleSignIn = () => {
-    // Giriş ekranına yönlendirme
     navigation.navigate('Login');
   };
 
@@ -93,6 +87,21 @@ const SignUpScreen = ({ navigation }) => {
             />
           </Animated.View>
 
+
+          <Animated.View entering={FadeInDown.duration(1000).springify()}
+          >
+
+
+            <AppTextInput
+              placeholder="Telefon Numarası"
+              keyboardType="phone-pad"
+              onChangeText={text => setTel(text)}
+              value={tel}
+              limit={11}
+            />
+
+          </Animated.View>
+
           <Animated.View entering={FadeInDown.duration(1000).springify()} >
             <AppTextInput
               placeholder="Email"
@@ -111,6 +120,7 @@ const SignUpScreen = ({ navigation }) => {
               secureTextEntry
             />
           </Animated.View>
+
         </View>
 
         <TouchableOpacity onPress={handleSignUp} style={styles.button}>
@@ -210,7 +220,7 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: 10,
     flex: 1,
-    paddingBottom: 10,
+    paddingBottom: 50,
   },
   input: {
     color: '#fff',
@@ -227,7 +237,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   inputBlock: {
-    marginTop: 40,
+    marginTop: 10,
     marginBottom: 15,
   },
   button: {
