@@ -22,7 +22,7 @@ const navigatons = [
 const AccountScreen = ({ navigation }) => {
   const userData = useSelector((state) => state.user.user);
 
-  console.log()
+  console.log(userData)
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -40,7 +40,7 @@ const AccountScreen = ({ navigation }) => {
 
         <View style={{ flexDirection: 'row', alignItems: 'center', borderColor: 'rgba(128, 185, 5,0.3)', borderBottomWidth: 1, paddingVertical: 15 }}>
           <Icon3 name='mobile-alt' size={19} color='rgba(128, 185, 5,0.8)'></Icon3>
-          <Text style={styles.text}> {userData.tel}</Text>
+          <Text style={styles.text}>{userData.tel}</Text>
         </View>
 
       </View>
@@ -49,31 +49,33 @@ const AccountScreen = ({ navigation }) => {
 
         {navigatons.map((item, index) => (
           <View key={index}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderColor: 'rgba(128, 185, 5,0.3)', borderBottomWidth: 1, paddingVertical: 15 }}>
-              <View style={{ flexDirection: 'row' }}>
-                {item.icon}
-                <TouchableOpacity onPress={() => { navigation.navigate(item.name) }}>
+            <TouchableOpacity onPress={() => { navigation.navigate(item.name) }}>
+
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderColor: 'rgba(128, 185, 5,0.3)', borderBottomWidth: 1, paddingVertical: 15 }}>
+                <View style={{ flexDirection: 'row' }}>
+                  {item.icon}
                   <Text style={styles.text}>{item.name}</Text>
-                </TouchableOpacity>
-              </View >
+                </View >
 
-              <View>
-                <Icon5
-                  name="arrow-forward-ios"
-                  type="material"
-                  size={15}
-                  color='rgba(128, 185, 5,0.8)'
-                  iconStyle={{ marginRight: 10 }}
-                />
+                <View>
+                  <Icon5
+                    name="arrow-forward-ios"
+                    type="material"
+                    size={15}
+                    color='rgba(128, 185, 5,0.8)'
+                    iconStyle={{ marginRight: 10 }}
+                  />
+                </View>
+
               </View>
+            </TouchableOpacity>
 
-            </View>
           </View>
         ))}
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',  paddingVertical: 10 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10 }}>
 
-          <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
 
             <Icon5
               name="logout"
@@ -94,7 +96,7 @@ const AccountScreen = ({ navigation }) => {
 
 
 
-  
+
     </ScrollView>
   );
 };

@@ -44,17 +44,22 @@ const DetailScreen = () => {
   const cart = useSelector(makeSelectCart);
 
 
+  const product = products.find((item) => item.id === productId);
+
 
   const toggleFavorite = () => {
     if (isFavorite) {
-      dispatch(removeFromFavorites([product]));
+      dispatch(removeFromFavorites(product));
     } else {
-      dispatch(addToFavorites([product]));
+      dispatch(addToFavorites(product));
     }
   };
   const favoriteProducts = useSelector(state => state.favorite.products);
-  const isFavorite = favoriteProducts.some(favProduct => favProduct.id === products.id);
 
+  const isFavorite = favoriteProducts.some(favProduct => favProduct.id === product.id);
+
+
+  console.log(favoriteProducts)
 
   useEffect(() => {
     navigation.setOptions({
@@ -92,7 +97,6 @@ const DetailScreen = () => {
     setLightboxVisible(false);
   };
 
-  const product = products.find((item) => item.id === productId);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -182,14 +186,13 @@ const DetailScreen = () => {
             <View style={{
               borderRadius: 50,
               backgroundColor: 'rgba(239, 236, 236, 0.9)',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 10
+              padding:8,
+              width: 40,
+              height: 40
             }} >
-              <Text> {isFavorite ? <Icon3 name="favorite" size={25} color="rgba(253, 132, 7, 1)" />
-                :
-                <Icon3 name="favorite-border" size={25} color="rgba(253, 132, 7, 1)" />}
-              </Text>
+              <View>
+              <Icon3 name={isFavorite ? 'favorite' : 'favorite-border'} size={25} color="rgba(253, 132, 7, 1)" style={{width:40,height:40,display:'flex',alignItems:'center',justifyContent:'center'}} />        
+              </View>
 
             </View>
           </TouchableOpacity>
