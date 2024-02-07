@@ -13,6 +13,7 @@ import SignUpScreen from '../screens/SignupScreen';
 import ShoppingPay from '../screens/ShoppingPay';
 import OrderSucces from '../screens/OrderSucces';
 import Orders from '../screens/Orders'
+import FavoriteScreen from '../screens/FavoriteScreen';
 import { useSelector } from 'react-redux';
 
 const Stack = createNativeStackNavigator();
@@ -70,6 +71,7 @@ export default function RootNavigator() {
                         backgroundColor: '#80B905',
                     },
                     headerTintColor: '#fff',
+                    headerBackTitle: 'Ana Ekran',
                     headerRight: () => (
                         cart.length > 0 ? (
                             <View>
@@ -110,6 +112,8 @@ export default function RootNavigator() {
             />
             <Stack.Screen name="Sipariş Tamamlama" component={OrderSucces} options={{ headerShown: false, animation: 'slide_from_bottom', }} />
             <Stack.Screen name="Siparişlerim" component={Orders} options={{ headerShown: true, animation: 'slide_from_right', }} />
+            <Stack.Screen name="Favorilerim" component={FavoriteScreen} options={{ headerShown: true, animation: 'slide_from_right', }} />
+
 
 
         </Stack.Navigator>

@@ -13,7 +13,7 @@ import Icon6 from 'react-native-vector-icons/Entypo';
 const navigatons = [
   { id: 1, name: 'Adreslerim', icon: <Icon4 name='location' size={19} color='rgba(128, 185, 5,0.8)' /> },
   { id: 2, name: 'Siparişlerim', icon: <Icon2 name='shopping-bag' size={19} color='rgba(128, 185, 5,0.8)' /> },
-  { id: 3, name: 'Favori Ürünlerim', icon: <Icon5 name='favorite-outline' size={19} color='rgba(128, 185, 5,0.8)' /> },
+  { id: 3, name: 'Favorilerim', icon: <Icon5 name='favorite-outline' size={19} color='rgba(128, 185, 5,0.8)' /> },
   { id: 4, name: 'Ödeme yöntemlerim', icon: <Icon4 name='credit-card' size={19} color='rgba(128, 185, 5,0.8)' /> },
   { id: 5, name: 'İletişim Tercihleri', icon: <Icon6 name='bell' size={19} color='rgba(128, 185, 5,0.8)' /> },
   { id: 6, name: 'Hesap Ayarları', icon: <Icon4 name='lock' size={19} color='rgba(128, 185, 5,0.8)' /> },
@@ -73,7 +73,7 @@ const AccountScreen = ({ navigation }) => {
           </View>
         ))}
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 15}}>
 
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
 
@@ -134,7 +134,6 @@ const styles = StyleSheet.create({
   },
   main: {
     marginVertical: 10,
-    paddingVertical: 5,
     paddingHorizontal: 10,
     backgroundColor: '#fff',
   }
